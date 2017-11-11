@@ -14,6 +14,9 @@ public class MineField {
     private int[][] _map;
 
 
+    /**
+     * Generate a mine field using defualt data
+     */
     public MineField(){
         _row = DEFAULT_ROW;
         _col = DEFAULT_COL;
@@ -21,6 +24,9 @@ public class MineField {
         generateField();
     }
 
+    /**
+     * Allow custom mine fields
+     */
     public MineField(int row, int col, int mineNum){
         _row = row;
         _col = col;
@@ -36,6 +42,7 @@ public class MineField {
         plantMines();
         calcMap();
 
+        //Print out the field
         for (int i = 0; i < _row; i++) {
             for (int j = 0; j < _col; j++) {
                 if (_map[i][j] == -1){
@@ -48,6 +55,9 @@ public class MineField {
         }
     }
 
+    /**
+     * Randomly set 'mineNum' mines in the map
+     */
     private void plantMines(){
         int i = 0;
         while (i < _mineNum) {
@@ -58,14 +68,15 @@ public class MineField {
                 i++;
             }
         }
-        System.out.println(i);
     }
 
+    /**
+     * Generate the number on every grid
+     */
     private void calcMap(){
         for (int i = 0; i < _row; i++){
             for (int j = 0; j < _col; j++) {
                 if (_map[i][j] == -1){
-                    System.out.println(i+","+j);
                     if (checkout(i-1, j-1)){
                         _map[i-1][j-1] ++;
                     }
@@ -95,6 +106,9 @@ public class MineField {
         }
     }
 
+    /**
+     * Returns true when the input grid is within the field && is not a mine. False otherwise
+     */
     private boolean checkout(int row, int col){
         if ((row >= 0) && (row < _row) && (col >= 0) && (col < _col)){
             return _map[row][col] != -1;
