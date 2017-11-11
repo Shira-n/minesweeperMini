@@ -3,9 +3,9 @@ package sample;
 import java.util.Arrays;
 
 public class MineField {
-    private static int DEFUALT_ROW = 16;
-    private static int DEFUALT_COL = 30;
-    private static int DEFUALT_MINES = 99;
+    private static int DEFAULT_ROW = 16;
+    private static int DEFAULT_COL = 30;
+    private static int DEFAULT_MINES = 99;
 
     private int _row;
     private int _col;
@@ -15,9 +15,9 @@ public class MineField {
 
 
     public MineField(){
-        _row = DEFUALT_ROW;
-        _col = DEFUALT_COL;
-        _mineNum = DEFUALT_MINES;
+        _row = DEFAULT_ROW;
+        _col = DEFAULT_COL;
+        _mineNum = DEFAULT_MINES;
         generateField();
     }
 
