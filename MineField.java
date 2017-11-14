@@ -116,10 +116,11 @@ public class MineField {
         return false;
     }
 
+
     /*
         Getters
      */
-    public int getNum(int col, int row){
+    public int getNum(int row, int col){
         return _map[row][col];
     }
 
