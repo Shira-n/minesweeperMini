@@ -1,18 +1,22 @@
 package sample;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class MineField {
-    private static int DEFAULT_ROW = 16;
-    private static int DEFAULT_COL = 30;
-    private static int DEFAULT_MINES = 99;
+    private static int DEFAULT_ROW = 5;
+    private static int DEFAULT_COL = 10;
+    private static int DEFAULT_MINES = 20;
+    private static int SAFEZONE = 1;
 
     private int _row;
     private int _col;
     private int _mineNum;
 
     private int[][] _map;
-
+    private boolean[][] _clearArea;
 
     /**
      * Generate a mine field using default data
@@ -27,82 +31,90 @@ public class MineField {
     /**
      * Allow custom mine fields
      */
-    public MineField(int row, int col, int mineNum){
+    public MineField(int row, int col, int mineNum)throws MineNumExceedException{
         _row = row;
         _col = col;
         _mineNum = mineNum;
-        generateField();
+        if(mineNum > _row *_col){
+            throw new MineNumExceedException();
+        }else {
+            generateField();
+        }
     }
 
     private void generateField(){
-        _map = new int[_row][_col];
+        int realRow = _row + 2 * SAFEZONE;
+        int realCol = _col + 2 * SAFEZONE;
+        _map = new int[realRow][realCol];
+        _clearArea = new boolean[realRow][realCol];
         for (int[] row : _map) {
             Arrays.fill(row, 0);
         }
+        for (boolean[] row : _clearArea) {
+            Arrays.fill(row, false);
+        }
         plantMines();
-        calcMap();
 
         //Print out the field
-        for (int i = 0; i < _row; i++) {
-            for (int j = 0; j < _col; j++) {
-                if (_map[i][j] == -1){
+        for (int i = 0; i < _map.length; i++) {
+            for (int col = 0; col < _map[0].length; col++) {
+                if (_map[i][col] == -1){
                     System.out.print("*" + "\t");
                 }else{
-                    System.out.print(_map[i][j] + "\t");
+                    System.out.print(_map[i][col] + "\t");
                 }
             }
             System.out.print("\n");
         }
+        System.out.print("\n");
     }
 
     /**
      * Randomly set 'mineNum' mines in the map
      */
     private void plantMines(){
-        int i = 0;
-        while (i < _mineNum) {
-            int row = (int) (Math.random() * _row);
-            int col = (int) (Math.random() * _col);
-            if (_map[row][col] == 0) {
-                _map[row][col] = -1;
-                i++;
-            }
+        ArrayList<Integer> field = new ArrayList<>();
+        for (int i = 0; i < _row * _col; i++){
+            field.add(i);
         }
+        Collections.shuffle(field);
+        List<Integer> mineList = field.subList(0, _mineNum);
+        for (int m : mineList){
+            int row = m / _col + SAFEZONE;
+            int col = m % _col  + SAFEZONE;
+            _map[row][col] = -1;
+            calcMap(row, col);
+        }
+        System.out.println(" ");
     }
 
     /**
      * Generate the number on every grid
      */
-    private void calcMap(){
-        for (int i = 0; i < _row; i++){
-            for (int j = 0; j < _col; j++) {
-                if (_map[i][j] == -1){
-                    if (checkout(i-1, j-1)){
-                        _map[i-1][j-1] ++;
-                    }
-                    if (checkout(i-1, j)){
-                        _map[i-1][j] ++;
-                    }
-                    if (checkout(i-1, j+1)){
-                        _map[i-1][j+1] ++;
-                    }
-                    if (checkout(i, j-1)){
-                        _map[i][j-1] ++;
-                    }
-                    if (checkout(i, j+1)){
-                        _map[i][j+1] ++;
-                    }
-                    if (checkout(i+1, j-1)){
-                        _map[i+1][j-1] ++;
-                    }
-                    if (checkout(i+1, j)){
-                        _map[i+1][j] ++;
-                    }
-                    if (checkout(i+1, j+1)){
-                        _map[i+1][j+1] ++;
-                    }
-                }
-            }
+    private void calcMap(int row, int col){
+        if (checkout(row-1, col-1)){
+            _map[row-1][col-1] ++;
+        }
+        if (checkout(row-1, col)){
+            _map[row-1][col] ++;
+        }
+        if (checkout(row-1, col+1)){
+            _map[row-1][col+1] ++;
+        }
+        if (checkout(row, col-1)){
+            _map[row][col-1] ++;
+        }
+        if (checkout(row, col+1)){
+            _map[row][col+1] ++;
+        }
+        if (checkout(row+1, col-1)){
+            _map[row+1][col-1] ++;
+        }
+        if (checkout(row+1, col)){
+            _map[row+1][col] ++;
+        }
+        if (checkout(row+1, col+1)){
+            _map[row+1][col+1] ++;
         }
     }
 
@@ -110,11 +122,20 @@ public class MineField {
      * Returns true when the input grid is within the field && is not a mine. False otherwise
      */
     private boolean checkout(int row, int col){
-        if ((row >= 0) && (row < _row) && (col >= 0) && (col < _col)){
+        if ((row > 0) && (row < _map.length - 1) && (col > 0) && (col < _map[0].length - 1)){
             return _map[row][col] != -1;
         }
         return false;
     }
+
+
+
+    
+
+
+
+
+
 
 
     /*
@@ -135,4 +156,5 @@ public class MineField {
     public int getMineNum(){
         return _mineNum;
     }
+
 }
