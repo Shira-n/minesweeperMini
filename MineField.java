@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class MineField {
-    private static int DEFAULT_ROW = 5;
-    private static int DEFAULT_COL = 10;
-    private static int DEFAULT_MINES = 20;
+    private static int DEFAULT_ROW = 16;
+    private static int DEFAULT_COL = 30;
+    private static int DEFAULT_MINES = 99;
     private static int SAFEZONE = 1;
 
     private int _row;
@@ -51,10 +51,11 @@ public class MineField {
             Arrays.fill(row, 0);
         }
         for (boolean[] row : _clearArea) {
-            Arrays.fill(row, false);
+           Arrays.fill(row, false);
         }
         plantMines();
 
+        /*
         //Print out the field
         for (int i = 0; i < _map.length; i++) {
             for (int col = 0; col < _map[0].length; col++) {
@@ -67,10 +68,11 @@ public class MineField {
             System.out.print("\n");
         }
         System.out.print("\n");
+        */
     }
 
     /**
-     * Randomly set 'mineNum' mines in the map
+     * Randomly set mines in the map
      */
     private void plantMines(){
         ArrayList<Integer> field = new ArrayList<>();
@@ -85,7 +87,6 @@ public class MineField {
             _map[row][col] = -1;
             calcMap(row, col);
         }
-        System.out.println(" ");
     }
 
     /**
@@ -130,7 +131,38 @@ public class MineField {
 
 
 
-    
+
+    public ArrayList<int[]> ripple(int row, int col){
+        if(_map[row][col]==-1){
+            return null;
+        }else{
+            ArrayList<int[]> rippleList = new ArrayList<>();
+            if (!_clearArea[row][col] || _map[row][col] == 0){
+                _clearArea[row][col] = true;
+                int[] source = {row, col};
+                rippleList.add(source);
+                ArrayList<int[]> topr = ripple(row-1, col-1);
+                ArrayList<int[]> top = ripple(row-1, col);
+                ArrayList<int[]> topl = ripple(row-1, col+1);
+                ArrayList<int[]> l = ripple(row, col-1);
+                ArrayList<int[]> r = ripple(row, col+1);
+                ArrayList<int[]> botl = ripple(row+1, col-1);
+                ArrayList<int[]> bot = ripple(row+1, col);
+                ArrayList<int[]> botr = ripple(row+1, col+1);
+                rippleList.addAll(topr);
+                rippleList.addAll(top);
+                rippleList.addAll(topl);
+                rippleList.addAll(l);
+                rippleList.addAll(r);
+                rippleList.addAll(botl);
+                rippleList.addAll(bot);
+                rippleList.addAll(botr);
+            }
+            return rippleList;
+        }
+    }
+
+
 
 
 

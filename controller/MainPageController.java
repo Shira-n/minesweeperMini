@@ -1,5 +1,6 @@
 package sample.controller;
 
+import com.sun.deploy.net.proxy.RemoveCommentReader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,40 +19,44 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import sample.MineField;
 
+import java.util.ArrayList;
+
 public class MainPageController {
-
-    private static final int NUMCOLS = 30;
-    private static final int NUMROWS = 16;
-
     @FXML
     private GridPane _pane;
 
     @FXML
     private AnchorPane _anchorPane;
 
-    private MineField _field = new MineField();
+    private MineField _field;
+    private boolean[][] _clearArea;
 
     @FXML
     public void initialize() {
+        //get user customed size here
 
+        _field = new MineField();
+        int rowNum = _field.getRow();
+        int colNum = _field.getCol();
+        _clearArea = new boolean[rowNum][colNum];
 
         //set up cols and rows of grid pane
-        for (int i = 0; i < NUMCOLS; i++) {
-            ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(20);
-            _pane.getColumnConstraints().add(col);
-        }
-        for (int i = 0; i < NUMROWS; i++) {
+        for (int i = 0; i < rowNum; i++) {
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(20);
             _pane.getRowConstraints().add(row);
+        }
+        for (int i = 0; i < colNum; i++) {
+            ColumnConstraints col = new ColumnConstraints();
+            col.setPrefWidth(20);
+            _pane.getColumnConstraints().add(col);
         }
         _pane.setHgap(2.0);
         _pane.setVgap(2.0);
 
         //add buttons
-        for (int i = 0; i <NUMCOLS; i++) {
-            for (int j = 0; j< NUMROWS; j++) {
+        for (int i = 0; i <colNum; i++) {
+            for (int j = 0; j < rowNum; j++) {
                 Rectangle button = new Rectangle(20,20, Color.LIGHTGREY);
                 _pane.add(button, i, j);
                 button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -76,6 +81,20 @@ public class MainPageController {
     }
 
     public void leftClicked(Rectangle selected, int[] index) {
+        ArrayList<int []> pos = _field.ripple(index[0], index[1]);
+        if (pos.size() < 1){
+            gameOver();
+        }else{
+
+            _pane.
+            selected.setVisible(false);
+            Label label = new Label ("" + value);
+            label.setPrefSize(20,20);
+            label.setAlignment(Pos.CENTER);
+            _pane.add(label,index[1], index[0]);
+        }
+
+
         System.out.println(index[0]+" "+ index[1]);
        int value = _field.getNum(index[0],index[1]);
         System.out.println(value);
