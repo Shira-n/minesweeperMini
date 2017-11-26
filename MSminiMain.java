@@ -18,6 +18,8 @@ public class MSminiMain extends Application {
 
 
     public static void main(String[] args) {
+
+        //MineField f = new MineField();
         launch(args);
     }
 }
