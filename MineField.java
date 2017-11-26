@@ -3,8 +3,8 @@ package sample;
 import java.util.Arrays;
 
 public class MineField {
-    private static int DEFAULT_ROW = 16;
-    private static int DEFAULT_COL = 30;
+    private static int DEFAULT_ROW = 10;
+    private static int DEFAULT_COL = 10;
     private static int DEFAULT_MINES = 99;
 
     private int _row;

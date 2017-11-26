@@ -1,5 +1,6 @@
 package sample.controller;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -16,12 +17,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import sample.Cell;
 import sample.MineField;
+
+import java.util.ArrayList;
 
 public class MainPageController {
 
-    private static final int NUMCOLS = 30;
-    private static final int NUMROWS = 16;
+    private final int NUMCOLS = 30;
+    private final int NUMROWS = 16;
 
     @FXML
     private GridPane _pane;
@@ -30,6 +34,8 @@ public class MainPageController {
     private AnchorPane _anchorPane;
 
     private MineField _field = new MineField();
+
+    private ArrayList<Node> checkedSquare = new ArrayList<Node>();
 
     @FXML
     public void initialize() {
@@ -52,9 +58,9 @@ public class MainPageController {
         //add buttons
         for (int i = 0; i <NUMCOLS; i++) {
             for (int j = 0; j< NUMROWS; j++) {
-                Rectangle button = new Rectangle(20,20, Color.LIGHTGREY);
-                _pane.add(button, i, j);
-                button.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                Rectangle rect = new Rectangle(20,20, Color.LIGHTGREY);
+                _pane.add(rect,i,j);
+                rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         if (event.getButton() == MouseButton.SECONDARY) {
@@ -82,15 +88,104 @@ public class MainPageController {
         if (value==-1) {
             gameOver();
         }
+        else{
+            clearSquare(selected, value);
+        }
+
+    }
+
+    private void clearSquare(Rectangle selected, int value) {
+        selected.setVisible(false);
+        if (value == 0) {
+            recursiveClear(selected);
+        }
         else {
-            selected.setVisible(false);
-            Label label = new Label ("" + value);
-            label.setPrefSize(20,20);
+            Label label = new Label("" + value);
+            label.setPrefSize(20, 20);
             label.setAlignment(Pos.CENTER);
-            _pane.add(label,index[1], index[0]);
+
+            if (value == 1) {
+                label.setTextFill(Color.BLUE);
+            } else if (value == 2) {
+                label.setTextFill(Color.GREEN);
+            } else if (value == 3) {
+                label.setTextFill(Color.PINK);
+            } else if (value == 4) {
+                label.setTextFill(Color.PURPLE);
+            }
+
+            _pane.add(label, _pane.getColumnIndex(selected),_pane.getRowIndex(selected));
         }
     }
 
+    private void recursiveClear(Rectangle origin) {
+        //check middle left square
+        if ((_pane.getColumnIndex(origin) != 0)) {
+            Node node = getNode(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) - 1);
+            if (_field.getNum(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) - 1) == 0) {
+                if (!checkedSquare.contains(node)) {
+                    checkedSquare.add((node));
+                    node.setVisible(false);
+                    recursiveClear((Rectangle) node);
+                }
+            }
+            else {
+
+            }
+        }
+            //check top center square
+            if (_pane.getRowIndex(origin) != 0) {
+                if (_field.getNum(_pane.getRowIndex(origin) - 1, _pane.getColumnIndex(origin)) == 0) {
+                    Node node = getNode(_pane.getRowIndex(origin) - 1, _pane.getColumnIndex(origin));
+                    if (!checkedSquare.contains(node)) {
+                        checkedSquare.add((node));
+                        node.setVisible(false);
+                        recursiveClear((Rectangle) node);
+                    }
+                }
+            }
+            //check middle right square
+            if (_pane.getColumnIndex(origin) < (NUMCOLS - 1)) {
+                if (_field.getNum(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) + 1) == 0) {
+                    Node node = getNode(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) + 1);
+                    if (!checkedSquare.contains(node)) {
+                        checkedSquare.add((node));
+                        node.setVisible(false);
+                        recursiveClear((Rectangle) node);
+                    }
+                }
+            }
+            //check middle left square
+            if (_pane.getRowIndex(origin) < (NUMROWS - 1)) {
+                if (_field.getNum(_pane.getRowIndex(origin) + 1, _pane.getColumnIndex(origin)) == 0) {
+                    Node node = getNode(_pane.getRowIndex(origin) + 1, _pane.getColumnIndex(origin));
+                    if (!checkedSquare.contains(node)) {
+                        checkedSquare.add((node));
+                        node.setVisible(false);
+                        recursiveClear((Rectangle) node);
+                    }
+                }
+            }
+        }
+
+
+    private Node getNode (int row, int column) {
+        Node result = null;
+        ObservableList<Node> childrens = _pane.getChildren();
+
+        for (Node node : childrens) {
+            if(_pane.getRowIndex(node) == row && _pane.getColumnIndex(node) == column) {
+                result = node;
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    private void revealValue() {
+
+    }
     private void gameOver() {
         System.out.println("Game Over");
     }
