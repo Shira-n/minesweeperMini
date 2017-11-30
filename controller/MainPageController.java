@@ -114,10 +114,16 @@ public class MainPageController {
             for (int[] clear : pos) {
                 int row = clear[0];
                 int col = clear[1];
-                Label label = new Label("" + _field.getNum(row, col));
-                label.setPrefSize(20, 20);
-                label.setAlignment(Pos.CENTER);
-                _pane.add(label, col, row);
+                Rectangle node = (Rectangle) getNode(row, col);
+                node.setFill(Color.GRAY);
+                int value = _field.getNum(row, col);
+                if (value != 0) {
+                    Label label = new Label(""+ value);
+                    label.setPrefSize(20, 20);
+                    label.setAlignment(Pos.CENTER);
+                    label.setTextFill(Color.WHITE);
+                    _pane.add(label, col, row);
+                }
             }
         }
     }
