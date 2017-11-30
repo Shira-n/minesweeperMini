@@ -6,10 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class MineField {
-
-    private static int DEFAULT_ROW = 5;
+    private static int DEFAULT_ROW = 10;
     private static int DEFAULT_COL = 10;
-    private static int DEFAULT_MINES = 20;
+    private static int DEFAULT_MINES = 3;
     private static int SAFEZONE = 1;
 
     private int _row;
@@ -52,9 +51,10 @@ public class MineField {
             Arrays.fill(row, 0);
         }
         for (boolean[] row : _clearArea) {
-            Arrays.fill(row, false);
+           Arrays.fill(row, false);
         }
         plantMines();
+
 
         //Print out the field
         for (int i = 0; i < _map.length; i++) {
@@ -68,10 +68,11 @@ public class MineField {
             System.out.print("\n");
         }
         System.out.print("\n");
+
     }
 
     /**
-     * Randomly set 'mineNum' mines in the map
+     * Randomly set mines in the map
      */
     private void plantMines(){
         ArrayList<Integer> field = new ArrayList<>();
@@ -86,7 +87,6 @@ public class MineField {
             _map[row][col] = -1;
             calcMap(row, col);
         }
-        System.out.println(" ");
     }
 
     /**
@@ -130,20 +130,36 @@ public class MineField {
     }
 
 
-
-    
-
-
-
-
-
-
+    public ArrayList<int[]> sweep(int row, int col) {
+        int fullRow = row + SAFEZONE;
+        int fullCol = col + SAFEZONE;
+        if ( !checkout(fullRow, fullCol) || isClicked(row, col)) {
+        //if (isMine(row, col) || isClicked(row, col)) {
+            return new ArrayList<>();
+        }else{
+            ArrayList<int[]> sweepList = new ArrayList<>();
+            int[] source = {row, col};
+            sweepList.add(source);
+            _clearArea[fullRow][fullCol] = true;
+            if(_map[fullRow][fullCol] == 0){
+                sweepList.addAll(sweep(row-1,col-1));
+                sweepList.addAll(sweep(row-1,col));
+                sweepList.addAll(sweep(row-1,col+1));
+                sweepList.addAll(sweep(row,col-1));
+                sweepList.addAll(sweep(row,col+1));
+                sweepList.addAll(sweep(row+1,col-1));
+                sweepList.addAll(sweep(row+1,col));
+                sweepList.addAll(sweep(row+1,col+1));
+            }
+            return sweepList;
+        }
+    }
 
     /*
         Getters
      */
     public int getNum(int row, int col){
-        return _map[row][col];
+        return _map[row + SAFEZONE][col + SAFEZONE];
     }
 
     public int getRow(){
@@ -157,5 +173,10 @@ public class MineField {
     public int getMineNum(){
         return _mineNum;
     }
+
+
+    public boolean isMine(int row, int col){ return _map[row + SAFEZONE][col + SAFEZONE] == -1; }
+
+    public boolean isClicked(int row, int col){ return _clearArea[row + SAFEZONE][col + SAFEZONE]; }
 
 }
