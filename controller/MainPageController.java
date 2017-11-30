@@ -39,9 +39,10 @@ public class MainPageController {
 
     private int _col;
 
+
     @FXML
     public void initialize() {
-
+        //get the number of rows and columns of the new generated mine field
         _row = _field.getRow();
         _col = _field.getCol();
 
@@ -64,13 +65,16 @@ public class MainPageController {
             for (int j = 0; j< _row; j++) {
                 Rectangle rect = new Rectangle(20,20, Color.LIGHTGREY);
                 _pane.add(rect,i,j);
+                //add event handler for each square
                 rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+                        //if the square senses a right click action
                         if (event.getButton() == MouseButton.SECONDARY) {
                             System.out.println("Right");
                             rightClick((Rectangle)event.getSource(), getIndex(event.getSource()));
                         }
+                        //when the square senses a left click action
                         else {
                             System.out.println("Left");
                             leftClicked((Rectangle)event.getSource(), getIndex(event.getSource()));
@@ -81,6 +85,12 @@ public class MainPageController {
         }
     }
 
+    /**
+     * Method handles when user performs a right click on a certain square. If the square is already
+     * flagged (red color) then change it back to un-flagged (grey), and vice versa.
+     * @param selected
+     * @param index
+     */
     public void rightClick(Rectangle selected, int[] index) {
         if (selected.getFill().equals(Color.RED)) {
             selected.setFill(Color.LIGHTGREY);
@@ -90,6 +100,12 @@ public class MainPageController {
         }
     }
 
+    /**
+     * Method is called when the user perform left click on a certain square. If the square is a mine,
+     * then game over. Otherwise, it clears the square and check the surrounding squares.
+     * @param selected
+     * @param index
+     */
     public void leftClicked(Rectangle selected, int[] index) {
         System.out.println(index[0]+" "+ index[1]);
        int value = _field.getNum(index[0],index[1]);
