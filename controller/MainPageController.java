@@ -1,7 +1,6 @@
 package sample.controller;
 
-import com.sun.corba.se.impl.orbutil.concurrent.SyncUtil;
-import com.sun.deploy.net.proxy.RemoveCommentReader;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -18,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import sample.Cell;
 import sample.MineField;
 
 import java.util.ArrayList;
@@ -31,6 +31,12 @@ public class MainPageController {
 
     private MineField _field;
     private boolean[][] _clearArea;
+
+    private ArrayList<Node> checkedSquare = new ArrayList<Node>();
+
+    private int _row;
+
+    private int _col;
 
     @FXML
     public void initialize() {
@@ -78,22 +84,27 @@ public class MainPageController {
     }
 
     public void rightClick(Rectangle selected, int[] index) {
-        selected.setFill(Color.RED);
+        if (selected.getFill().equals(Color.RED)) {
+            selected.setFill(Color.LIGHTGREY);
+        }
+        else {
+            selected.setFill(Color.RED);
+        }
     }
 
     public void leftClicked(Rectangle selected, int[] index) {
-        System.out.println(_field.getNum(index[0],index[1]));
-        System.out.println(index[0]+" " + index[1]);
+        System.out.println(_field.getNum(index[0], index[1]));
+        System.out.println(index[0] + " " + index[1]);
 
-        ArrayList<int []> pos = _field.sweep(index[0], index[1]);
-        if (pos == null){
+        ArrayList<int[]> pos = _field.sweep(index[0], index[1]);
+        if (pos == null) {
             gameOver();
-        }else{
+        } else {
             for (int[] clear : pos) {
                 int row = clear[0];
                 int col = clear[1];
 
-               // _pane.getChildren().remove(col, row);
+                // _pane.getChildren().remove(col, row);
                 Label label = new Label("" + _field.getNum(row, col));
                 label.setPrefSize(20, 20);
                 label.setAlignment(Pos.CENTER);
@@ -108,16 +119,106 @@ public class MainPageController {
         if (value==-1) {
             gameOver();
         }
+        else{
+            clearSquare(selected, value);
+        }
+
+    }
+
+    private void clearSquare(Rectangle selected, int value) {
+        selected.setVisible(false);
+        if (value == 0) {
+            recursiveClear(selected);
+        }
         else {
-            selected.setVisible(false);
-            Label label = new Label ("" + value);
-            label.setPrefSize(20,20);
+            Label label = new Label("" + value);
+            label.setPrefSize(20, 20);
             label.setAlignment(Pos.CENTER);
-            _pane.add(label,index[1], index[0]);
+
+            if (value == 1) {
+                label.setTextFill(Color.BLUE);
+            } else if (value == 2) {
+                label.setTextFill(Color.GREEN);
+            } else if (value == 3) {
+                label.setTextFill(Color.PINK);
+            } else if (value == 4) {
+                label.setTextFill(Color.PURPLE);
+            }
+
+            _pane.add(label, _pane.getColumnIndex(selected),_pane.getRowIndex(selected));
+        }
+    }
+
+    private void recursiveClear(Rectangle origin) {
+        //check middle left square
+        if ((_pane.getColumnIndex(origin) != 0)) {
+            Node node = getNode(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) - 1);
+            if (_field.getNum(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) - 1) == 0) {
+                if (!checkedSquare.contains(node)) {
+                    checkedSquare.add((node));
+                    node.setVisible(false);
+                    recursiveClear((Rectangle) node);
+                }
+            }
+            else {
+
+            }
+        }
+            //check top center square
+            if (_pane.getRowIndex(origin) != 0) {
+                if (_field.getNum(_pane.getRowIndex(origin) - 1, _pane.getColumnIndex(origin)) == 0) {
+                    Node node = getNode(_pane.getRowIndex(origin) - 1, _pane.getColumnIndex(origin));
+                    if (!checkedSquare.contains(node)) {
+                        checkedSquare.add((node));
+                        node.setVisible(false);
+                        recursiveClear((Rectangle) node);
+                    }
+                }
+            }
+            //check middle right square
+            if (_pane.getColumnIndex(origin) < (_col - 1)) {
+                if (_field.getNum(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) + 1) == 0) {
+                    Node node = getNode(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) + 1);
+                    if (!checkedSquare.contains(node)) {
+                        checkedSquare.add((node));
+                        node.setVisible(false);
+                        recursiveClear((Rectangle) node);
+                    }
+                }
+            }
+            //check middle left square
+            if (_pane.getRowIndex(origin) < (_row - 1)) {
+                if (_field.getNum(_pane.getRowIndex(origin) + 1, _pane.getColumnIndex(origin)) == 0) {
+                    Node node = getNode(_pane.getRowIndex(origin) + 1, _pane.getColumnIndex(origin));
+                    if (!checkedSquare.contains(node)) {
+                        checkedSquare.add((node));
+                        node.setVisible(false);
+                        recursiveClear((Rectangle) node);
+                    }
+                }
+            }
         }
 */
     }
 
+
+    private Node getNode (int row, int column) {
+        Node result = null;
+        ObservableList<Node> childrens = _pane.getChildren();
+
+        for (Node node : childrens) {
+            if(_pane.getRowIndex(node) == row && _pane.getColumnIndex(node) == column) {
+                result = node;
+                break;
+            }
+        }
+        return result;
+    }
+
+
+    private void revealValue() {
+
+    }
     private void gameOver() {
         System.out.println("Game Over");
     }
