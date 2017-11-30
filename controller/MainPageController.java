@@ -1,5 +1,6 @@
 package sample.controller;
 
+import com.sun.corba.se.impl.orbutil.concurrent.SyncUtil;
 import com.sun.deploy.net.proxy.RemoveCommentReader;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -81,20 +82,26 @@ public class MainPageController {
     }
 
     public void leftClicked(Rectangle selected, int[] index) {
-        ArrayList<int []> pos = _field.ripple(index[0], index[1]);
-        if (pos.size() < 1){
+        System.out.println(_field.getNum(index[0],index[1]));
+        System.out.println(index[0]+" " + index[1]);
+
+        ArrayList<int []> pos = _field.sweep(index[0], index[1]);
+        if (pos == null){
             gameOver();
         }else{
+            for (int[] clear : pos) {
+                int row = clear[0];
+                int col = clear[1];
 
-            _pane.
-            selected.setVisible(false);
-            Label label = new Label ("" + value);
-            label.setPrefSize(20,20);
-            label.setAlignment(Pos.CENTER);
-            _pane.add(label,index[1], index[0]);
+               // _pane.getChildren().remove(col, row);
+                Label label = new Label("" + _field.getNum(row, col));
+                label.setPrefSize(20, 20);
+                label.setAlignment(Pos.CENTER);
+                _pane.add(label, col, row);
+            }
         }
 
-
+/*
         System.out.println(index[0]+" "+ index[1]);
        int value = _field.getNum(index[0],index[1]);
         System.out.println(value);
@@ -108,6 +115,7 @@ public class MainPageController {
             label.setAlignment(Pos.CENTER);
             _pane.add(label,index[1], index[0]);
         }
+*/
     }
 
     private void gameOver() {

@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class MineField {
-    private static int DEFAULT_ROW = 16;
-    private static int DEFAULT_COL = 30;
-    private static int DEFAULT_MINES = 99;
+    private static int DEFAULT_ROW = 10;
+    private static int DEFAULT_COL = 10;
+    private static int DEFAULT_MINES = 3;
     private static int SAFEZONE = 1;
 
     private int _row;
@@ -55,7 +55,7 @@ public class MineField {
         }
         plantMines();
 
-        /*
+
         //Print out the field
         for (int i = 0; i < _map.length; i++) {
             for (int col = 0; col < _map[0].length; col++) {
@@ -68,7 +68,7 @@ public class MineField {
             System.out.print("\n");
         }
         System.out.print("\n");
-        */
+
     }
 
     /**
@@ -130,51 +130,36 @@ public class MineField {
     }
 
 
-
-
-    public ArrayList<int[]> ripple(int row, int col){
-        if(_map[row][col]==-1){
-            return null;
+    public ArrayList<int[]> sweep(int row, int col) {
+        int fullRow = row + SAFEZONE;
+        int fullCol = col + SAFEZONE;
+        if ( !checkout(fullRow, fullCol) || isClicked(row, col)) {
+        //if (isMine(row, col) || isClicked(row, col)) {
+            return new ArrayList<>();
         }else{
-            ArrayList<int[]> rippleList = new ArrayList<>();
-            if (!_clearArea[row][col] || _map[row][col] == 0){
-                _clearArea[row][col] = true;
-                int[] source = {row, col};
-                rippleList.add(source);
-                ArrayList<int[]> topr = ripple(row-1, col-1);
-                ArrayList<int[]> top = ripple(row-1, col);
-                ArrayList<int[]> topl = ripple(row-1, col+1);
-                ArrayList<int[]> l = ripple(row, col-1);
-                ArrayList<int[]> r = ripple(row, col+1);
-                ArrayList<int[]> botl = ripple(row+1, col-1);
-                ArrayList<int[]> bot = ripple(row+1, col);
-                ArrayList<int[]> botr = ripple(row+1, col+1);
-                rippleList.addAll(topr);
-                rippleList.addAll(top);
-                rippleList.addAll(topl);
-                rippleList.addAll(l);
-                rippleList.addAll(r);
-                rippleList.addAll(botl);
-                rippleList.addAll(bot);
-                rippleList.addAll(botr);
+            ArrayList<int[]> sweepList = new ArrayList<>();
+            int[] source = {row, col};
+            sweepList.add(source);
+            _clearArea[fullRow][fullCol] = true;
+            if(_map[fullRow][fullCol] == 0){
+                sweepList.addAll(sweep(row-1,col-1));
+                sweepList.addAll(sweep(row-1,col));
+                sweepList.addAll(sweep(row-1,col+1));
+                sweepList.addAll(sweep(row,col-1));
+                sweepList.addAll(sweep(row,col+1));
+                sweepList.addAll(sweep(row+1,col-1));
+                sweepList.addAll(sweep(row+1,col));
+                sweepList.addAll(sweep(row+1,col+1));
             }
-            return rippleList;
+            return sweepList;
         }
     }
-
-
-
-
-
-
-
-
 
     /*
         Getters
      */
     public int getNum(int row, int col){
-        return _map[row][col];
+        return _map[row + SAFEZONE][col + SAFEZONE];
     }
 
     public int getRow(){
@@ -188,5 +173,10 @@ public class MineField {
     public int getMineNum(){
         return _mineNum;
     }
+
+
+    public boolean isMine(int row, int col){ return _map[row + SAFEZONE][col + SAFEZONE] == -1; }
+
+    public boolean isClicked(int row, int col){ return _clearArea[row + SAFEZONE][col + SAFEZONE]; }
 
 }
