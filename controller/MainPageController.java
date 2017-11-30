@@ -24,8 +24,6 @@ import java.util.ArrayList;
 
 public class MainPageController {
 
-    private final int NUMCOLS = 30;
-    private final int NUMROWS = 16;
 
     @FXML
     private GridPane _pane;
@@ -37,17 +35,23 @@ public class MainPageController {
 
     private ArrayList<Node> checkedSquare = new ArrayList<Node>();
 
+    private int _row;
+
+    private int _col;
+
     @FXML
     public void initialize() {
 
+        _row = _field.getRow();
+        _col = _field.getCol();
 
         //set up cols and rows of grid pane
-        for (int i = 0; i < NUMCOLS; i++) {
+        for (int i = 0; i < _col; i++) {
             ColumnConstraints col = new ColumnConstraints();
             col.setPrefWidth(20);
             _pane.getColumnConstraints().add(col);
         }
-        for (int i = 0; i < NUMROWS; i++) {
+        for (int i = 0; i < _row; i++) {
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(20);
             _pane.getRowConstraints().add(row);
@@ -56,8 +60,8 @@ public class MainPageController {
         _pane.setVgap(2.0);
 
         //add buttons
-        for (int i = 0; i <NUMCOLS; i++) {
-            for (int j = 0; j< NUMROWS; j++) {
+        for (int i = 0; i <_col; i++) {
+            for (int j = 0; j< _row; j++) {
                 Rectangle rect = new Rectangle(20,20, Color.LIGHTGREY);
                 _pane.add(rect,i,j);
                 rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -78,7 +82,12 @@ public class MainPageController {
     }
 
     public void rightClick(Rectangle selected, int[] index) {
-        selected.setFill(Color.RED);
+        if (selected.getFill().equals(Color.RED)) {
+            selected.setFill(Color.LIGHTGREY);
+        }
+        else {
+            selected.setFill(Color.RED);
+        }
     }
 
     public void leftClicked(Rectangle selected, int[] index) {
@@ -145,7 +154,7 @@ public class MainPageController {
                 }
             }
             //check middle right square
-            if (_pane.getColumnIndex(origin) < (NUMCOLS - 1)) {
+            if (_pane.getColumnIndex(origin) < (_col - 1)) {
                 if (_field.getNum(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) + 1) == 0) {
                     Node node = getNode(_pane.getRowIndex(origin), _pane.getColumnIndex(origin) + 1);
                     if (!checkedSquare.contains(node)) {
@@ -156,7 +165,7 @@ public class MainPageController {
                 }
             }
             //check middle left square
-            if (_pane.getRowIndex(origin) < (NUMROWS - 1)) {
+            if (_pane.getRowIndex(origin) < (_row - 1)) {
                 if (_field.getNum(_pane.getRowIndex(origin) + 1, _pane.getColumnIndex(origin)) == 0) {
                     Node node = getNode(_pane.getRowIndex(origin) + 1, _pane.getColumnIndex(origin));
                     if (!checkedSquare.contains(node)) {
