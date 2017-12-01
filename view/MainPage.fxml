@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -8,10 +9,11 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="_anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainPageController">
+<AnchorPane fx:id="_anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainPageController">
    <children>
-      <ToolBar prefHeight="40.0" prefWidth="1001.0">
+      <ToolBar prefHeight="41.0">
         <items>
             <MenuBar prefHeight="29.0" prefWidth="412.0" style="-fx-background-color: transparent;">
               <menus>
@@ -19,7 +21,10 @@
                      <items>
                         <Menu mnemonicParsing="false" text="New Game">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem fx:id="_easy" mnemonicParsing="false" onAction="#handlePressEasy" text="Easy" />
+                              <MenuItem fx:id="_intermediate" mnemonicParsing="false" onAction="#handlePressIntermediate" text="Intermediate" />
+                              <MenuItem fx:id="_expert" mnemonicParsing="false" onAction="#handlePressExpert" text="Expert" />
+                              <MenuItem fx:id="_custom" mnemonicParsing="false" onAction="#handlePressCustom" text="Custom" />
                           </items>
                         </Menu>
                      </items>
@@ -34,14 +39,21 @@
             </MenuBar>
         </items>
       </ToolBar>
-      <GridPane fx:id="_pane" layoutY="50.0" prefHeight="840.0" prefWidth="957.0">
+      <GridPane fx:id="_pane" layoutY="50.0">
          <columnConstraints>
+            <ColumnConstraints />
             <ColumnConstraints />
             <ColumnConstraints />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />
             <RowConstraints />
+            <RowConstraints />
          </rowConstraints></GridPane>
+      <Label fx:id="_gameOver" alignment="CENTER" layoutY="40.0" prefHeight="152.0" prefWidth="242.0" text="Game Over" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="50.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -29,6 +29,9 @@ public class MainPageController {
     @FXML
     private AnchorPane _anchorPane;
 
+    @FXML
+    private Label _gameOver;
+
     private MineField _field;
 
     private ArrayList<Node> checkedSquare = new ArrayList<Node>();
@@ -40,8 +43,8 @@ public class MainPageController {
 
     @FXML
     public void initialize() {
+        _gameOver.setVisible(false);
         //get user customed size here
-
         _field = new MineField();
         int rowNum = _field.getRow();
         int colNum = _field.getCol();
@@ -83,6 +86,7 @@ public class MainPageController {
                 });
             }
         }
+
     }
 
     /**
@@ -110,54 +114,55 @@ public class MainPageController {
      * @param index
      */
     public void leftClicked(Rectangle selected, int[] index) {
-        if (selected.getFill().equals(Color.GRAY)) {
-            _field.sweep(index[0],index[1]);
-        }
         if (!selected.getFill().equals(Color.RED)){
             // if the user clicks on a mine, then game over
             if (_field.isMine(index[0],index[1])) {
-                gameOver();
+                gameOver(selected);
             } else {
                 //find all the exposed squares generated from the click
                 ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
-                revealNode(pos);
+                revealNodes(pos);
             }
         }
 
     }
 
-    private void revealNode(ArrayList<int[]> list) {
-        System.out.println("revealed");
+    private void revealNodes(ArrayList<int[]> list) {
         //for each of the exposed square, clear the square
         for (int[] clear : list) {
             System.out.println(clear[0] + " " +clear[1]);
             int row = clear[0];
             int col = clear[1];
             Rectangle node = (Rectangle) getNode(row, col);
-            //change the sqaure background to grey colour
-            node.setFill(Color.GRAY);
+            clearSquare (node, row, col);
+        }
+    }
 
-            //get the value to be dsiplayed on the square
-            int value = _field.getNum(row, col);
+    private void clearSquare(Rectangle selected, int row, int col){
+        //change the sqaure background to grey colour
+        selected.setFill(Color.GRAY);
 
-            //if the value is not 0, then display the number, otherwise leave it as a blank square
-            if (value != 0) {
-                //set square text to the value
-                Label label = new Label("" + value);
-                //format the sqaure
-                label.setPrefSize(20, 20);
-                label.setAlignment(Pos.CENTER);
-                //change text colour to white
-                label.setTextFill(Color.WHITE);
-                _pane.add(label, col, row);
-                label.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        System.out.println("sweep");
-                        revealNode(_field.sweep(row,col));
-                    }
-                });
-            }
+        //get the value to be dsiplayed on the square
+        int value = _field.getNum(row, col);
+        if (value == -1) {
+            gameOver(selected);
+        }
+        //if the value is not 0, then display the number, otherwise leave it as a blank square
+        else if (value != 0) {
+            //set square text to the value
+            Label label = new Label("" + value);
+            //format the sqaure
+            label.setPrefSize(20, 20);
+            label.setAlignment(Pos.CENTER);
+            //change text colour to white
+            label.setTextFill(Color.WHITE);
+            _pane.add(label, col, row);
+            label.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    revealNodes(_field.sweep(row,col));
+                }
+            });
         }
     }
 
@@ -178,8 +183,11 @@ public class MainPageController {
     private void revealValue() {
 
     }
-    private void gameOver() {
+    private void gameOver(Rectangle selected) {
+        selected.setFill(Color.BLUE);
         System.out.println("Game Over");
+        _gameOver.setVisible(true);
+
     }
 
     private int[] getIndex(Object node){
@@ -190,5 +198,23 @@ public class MainPageController {
     }
 
 
+    @FXML
+    public void handlePressEasy() {
 
+    }
+
+    @FXML
+    public void handlePressIntermediate(){
+
+    }
+
+    @FXML
+    public void handlePressExpert() {
+
+    }
+
+    @FXML
+    public void handlePressCustom() {
+
+    }
 }
