@@ -197,6 +197,9 @@ public class MineField {
         if (!isMarked(row,col) && !isClicked(row, col)){
             int[] temp = {row, col};
             sweeplist.add(temp);
+            if (getNum(row, col) == 0){
+                sweeplist.addAll(ripple(row, col));
+            }
         }
     }
 
