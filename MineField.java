@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class MineField {
-    private static int DEFAULT_ROW = 10;
-    private static int DEFAULT_COL = 10;
-    private static int DEFAULT_MINES = 3;
+    private static int DEFAULT_ROW = 16;
+    private static int DEFAULT_COL = 30;
+    private static int DEFAULT_MINES = 99;
     private static int SAFEZONE = 1;
 
     private int _row;
@@ -17,6 +17,7 @@ public class MineField {
 
     private int[][] _map;
     private boolean[][] _clearArea;
+    private boolean[][] _marked;
 
     /**
      * Generate a mine field using default data
@@ -47,11 +48,11 @@ public class MineField {
         int realCol = _col + 2 * SAFEZONE;
         _map = new int[realRow][realCol];
         _clearArea = new boolean[realRow][realCol];
-        for (int[] row : _map) {
-            Arrays.fill(row, 0);
-        }
-        for (boolean[] row : _clearArea) {
-           Arrays.fill(row, false);
+        _marked = new boolean[realRow][realCol];
+        for (int i = 0; i < realRow; i++){
+            Arrays.fill(_map[i], 0);
+            Arrays.fill(_clearArea[i], false);
+            Arrays.fill(_marked[i], false);
         }
         plantMines();
 
@@ -130,30 +131,89 @@ public class MineField {
     }
 
 
-    public ArrayList<int[]> sweep(int row, int col) {
+    /**
+     * Return a list of points that would be revealed by clicking on this rectangle
+     */
+    public ArrayList<int[]> ripple(int row, int col) {
         int fullRow = row + SAFEZONE;
         int fullCol = col + SAFEZONE;
-        if ( !checkout(fullRow, fullCol) || isClicked(row, col)) {
-        //if (isMine(row, col) || isClicked(row, col)) {
+        if ( !checkout(fullRow, fullCol) || isClicked(row, col) || isMarked(row, col)) {
             return new ArrayList<>();
         }else{
-            ArrayList<int[]> sweepList = new ArrayList<>();
+            ArrayList<int[]> rippleList = new ArrayList<>();
             int[] source = {row, col};
-            sweepList.add(source);
+            rippleList.add(source);
             _clearArea[fullRow][fullCol] = true;
             if(_map[fullRow][fullCol] == 0){
-                sweepList.addAll(sweep(row-1,col-1));
-                sweepList.addAll(sweep(row-1,col));
-                sweepList.addAll(sweep(row-1,col+1));
-                sweepList.addAll(sweep(row,col-1));
-                sweepList.addAll(sweep(row,col+1));
-                sweepList.addAll(sweep(row+1,col-1));
-                sweepList.addAll(sweep(row+1,col));
-                sweepList.addAll(sweep(row+1,col+1));
+                rippleList.addAll(ripple(row-1,col-1));
+                rippleList.addAll(ripple(row-1,col));
+                rippleList.addAll(ripple(row-1,col+1));
+                rippleList.addAll(ripple(row,col-1));
+                rippleList.addAll(ripple(row,col+1));
+                rippleList.addAll(ripple(row+1,col-1));
+                rippleList.addAll(ripple(row+1,col));
+                rippleList.addAll(ripple(row+1,col+1));
             }
-            return sweepList;
+            return rippleList;
         }
     }
+
+
+
+    public ArrayList<int[]> sweep(int row, int col){
+        if (isDecided(row, col)){
+            int fullRow = row + SAFEZONE;
+            int fullCol = col + SAFEZONE;
+            ArrayList<int[]> sweeplist = new ArrayList<>();
+            addToSweepList(row-1, col-1, sweeplist);
+            addToSweepList(row-1, col, sweeplist);
+            addToSweepList(row-1, col+1, sweeplist);
+            addToSweepList(row, col-1, sweeplist);
+            addToSweepList(row, col+1, sweeplist);
+            addToSweepList(row+1, col-1, sweeplist);
+            addToSweepList(row+1, col, sweeplist);
+            addToSweepList(row+1, col+1, sweeplist);
+            return sweeplist;
+        }else{
+            return new ArrayList<>();
+        }
+    }
+
+
+    public boolean isDecided(int row, int col){
+        int i = 0;
+        if (isMarked(row-1,col-1)){ i++; }
+        if (isMarked(row-1,col)){ i++; }
+        if (isMarked(row-1,col+1)){ i++; }
+        if (isMarked(row,col+1)){ i++; }
+        if (isMarked(row,col-1)){ i++; }
+        if (isMarked(row+1,col-1)){ i++; }
+        if (isMarked(row+1,col)){ i++; }
+        if (isMarked(row+1,col+1)){ i++; }
+        return i == getNum(row, col);
+    }
+
+    private void addToSweepList(int row, int col, ArrayList<int[]> sweeplist){
+        if (!isMarked(row,col) && !isClicked(row, col)){
+            int[] temp = {row, col};
+            sweeplist.add(temp);
+        }
+    }
+
+
+    /*
+        Setters
+     */
+    public void mark(int row, int col){
+        int fullRow = row + SAFEZONE;
+        int fullCol = col + SAFEZONE;
+        if(_marked[fullRow][fullCol]){
+            _marked[fullRow][fullCol] = false;
+        }else{
+            _marked[fullRow][fullCol] = true;
+        }
+    }
+
 
     /*
         Getters
@@ -178,5 +238,7 @@ public class MineField {
     public boolean isMine(int row, int col){ return _map[row + SAFEZONE][col + SAFEZONE] == -1; }
 
     public boolean isClicked(int row, int col){ return _clearArea[row + SAFEZONE][col + SAFEZONE]; }
+
+    public boolean isMarked(int row, int col){ return _marked[row + SAFEZONE][col + SAFEZONE]; }
 
 }

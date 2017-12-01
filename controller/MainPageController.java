@@ -110,7 +110,7 @@ public class MainPageController {
         if (_field.isMine(index[0],index[1])) {
             gameOver();
         } else {
-            ArrayList<int[]> pos = _field.sweep(index[0], index[1]);
+            ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
             for (int[] clear : pos) {
                 int row = clear[0];
                 int col = clear[1];
