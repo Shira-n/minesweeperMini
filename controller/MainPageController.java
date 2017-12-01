@@ -92,9 +92,11 @@ public class MainPageController {
      * @param index
      */
     public void rightClick(Rectangle selected, int[] index) {
+        //if the square has been flagged before, un-flag it
         if (selected.getFill().equals(Color.RED)) {
             selected.setFill(Color.LIGHTGREY);
         }
+        //if the sqaure has not been flagged, then flag
         else {
             selected.setFill(Color.RED);
         }
@@ -107,25 +109,39 @@ public class MainPageController {
      * @param index
      */
     public void leftClicked(Rectangle selected, int[] index) {
-        if (_field.isMine(index[0],index[1])) {
-            gameOver();
-        } else {
-            ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
-            for (int[] clear : pos) {
-                int row = clear[0];
-                int col = clear[1];
-                Rectangle node = (Rectangle) getNode(row, col);
-                node.setFill(Color.GRAY);
-                int value = _field.getNum(row, col);
-                if (value != 0) {
-                    Label label = new Label(""+ value);
-                    label.setPrefSize(20, 20);
-                    label.setAlignment(Pos.CENTER);
-                    label.setTextFill(Color.WHITE);
-                    _pane.add(label, col, row);
+        if (!selected.getFill().equals(Color.RED)){
+            // if the user clicks on a mine, then game over
+            if (_field.isMine(index[0],index[1])) {
+                gameOver();
+            } else {
+                //find all the exposed squares generated from the click
+                ArrayList<int[]> pos = _field.sweep(index[0], index[1]);
+                //for each of the exposed square, clear the square
+                for (int[] clear : pos) {
+                    int row = clear[0];
+                    int col = clear[1];
+                    Rectangle node = (Rectangle) getNode(row, col);
+                    //change the sqaure background to grey colour
+                    node.setFill(Color.GRAY);
+
+                    //get the value to be dsiplayed on the square
+                    int value = _field.getNum(row, col);
+
+                    //if the value is not 0, then display the number, otherwise leave it as a blank square
+                    if (value != 0) {
+                        //set square text to the value
+                        Label label = new Label("" + value);
+                        //format the sqaure
+                        label.setPrefSize(20, 20);
+                        label.setAlignment(Pos.CENTER);
+                        //change text colour to white
+                        label.setTextFill(Color.WHITE);
+                        _pane.add(label, col, row);
+                    }
                 }
             }
         }
+
     }
 
 
