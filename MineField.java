@@ -16,6 +16,7 @@ public class MineField {
     private int _mineNum;
 
     private int[][] _map;
+    private boolean[][] _mines;
     private boolean[][] _clearArea;
     private boolean[][] _marked;
 
@@ -53,6 +54,7 @@ public class MineField {
             Arrays.fill(_map[i], 0);
             Arrays.fill(_clearArea[i], false);
             Arrays.fill(_marked[i], false);
+            Arrays.fill(_mines[i], false);
         }
         plantMines();
 
@@ -72,6 +74,8 @@ public class MineField {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Randomly set mines in the map
      */
@@ -86,6 +90,7 @@ public class MineField {
             int row = m / _col + SAFEZONE;
             int col = m % _col  + SAFEZONE;
             _map[row][col] = -1;
+            _mines[row][col] = true;
             calcMap(row, col);
         }
     }
@@ -94,30 +99,14 @@ public class MineField {
      * Generate the number on every grid
      */
     private void calcMap(int row, int col){
-        if (checkout(row-1, col-1)){
-            _map[row-1][col-1] ++;
-        }
-        if (checkout(row-1, col)){
-            _map[row-1][col] ++;
-        }
-        if (checkout(row-1, col+1)){
-            _map[row-1][col+1] ++;
-        }
-        if (checkout(row, col-1)){
-            _map[row][col-1] ++;
-        }
-        if (checkout(row, col+1)){
-            _map[row][col+1] ++;
-        }
-        if (checkout(row+1, col-1)){
-            _map[row+1][col-1] ++;
-        }
-        if (checkout(row+1, col)){
-            _map[row+1][col] ++;
-        }
-        if (checkout(row+1, col+1)){
-            _map[row+1][col+1] ++;
-        }
+        if (checkout(row-1, col-1)){ _map[row-1][col-1] ++; }
+        if (checkout(row-1, col)){ _map[row-1][col] ++; }
+        if (checkout(row-1, col+1)){ _map[row-1][col+1] ++; }
+        if (checkout(row, col-1)){ _map[row][col-1] ++; }
+        if (checkout(row, col+1)){ _map[row][col+1] ++; }
+        if (checkout(row+1, col-1)){ _map[row+1][col-1] ++; }
+        if (checkout(row+1, col)){ _map[row+1][col] ++; }
+        if (checkout(row+1, col+1)){ _map[row+1][col+1] ++; }
     }
 
     /**
@@ -131,6 +120,7 @@ public class MineField {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Return a list of points that would be revealed by clicking on this rectangle
      */
@@ -159,6 +149,7 @@ public class MineField {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public ArrayList<int[]> sweep(int row, int col){
         if (isDecided(row, col)){
@@ -179,8 +170,7 @@ public class MineField {
         }
     }
 
-
-    public boolean isDecided(int row, int col){
+    private boolean isDecided(int row, int col){
         int i = 0;
         if (isMarked(row-1,col-1)){ i++; }
         if (isMarked(row-1,col)){ i++; }
@@ -204,6 +194,13 @@ public class MineField {
     }
 
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public boolean hasWon(){
+        return _clearArea == _mines;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
         Setters
      */
@@ -243,5 +240,6 @@ public class MineField {
     public boolean isClicked(int row, int col){ return _clearArea[row + SAFEZONE][col + SAFEZONE]; }
 
     public boolean isMarked(int row, int col){ return _marked[row + SAFEZONE][col + SAFEZONE]; }
+
 
 }
