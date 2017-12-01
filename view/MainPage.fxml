@@ -13,18 +13,18 @@
    <children>
       <ToolBar prefHeight="40.0" prefWidth="1001.0">
         <items>
-            <MenuBar>
+            <MenuBar prefHeight="29.0" prefWidth="412.0" style="-fx-background-color: transparent;">
               <menus>
-                <Menu mnemonicParsing="false" text="File">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Close" />
-                  </items>
+                <Menu mnemonicParsing="false" text="Game">
+                     <items>
+                        <Menu mnemonicParsing="false" text="New Game">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                          </items>
+                        </Menu>
+                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
-                  </items>
-                </Menu>
+                <Menu mnemonicParsing="false" text="View" />
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
                     <MenuItem mnemonicParsing="false" text="About" />

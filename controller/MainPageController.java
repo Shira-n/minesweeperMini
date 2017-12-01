@@ -93,6 +93,7 @@ public class MainPageController {
      */
     public void rightClick(Rectangle selected, int[] index) {
         //if the square has been flagged before, un-flag it
+        _field.mark(index[0], index[1]);
         if (selected.getFill().equals(Color.RED)) {
             selected.setFill(Color.LIGHTGREY);
         }
@@ -109,41 +110,56 @@ public class MainPageController {
      * @param index
      */
     public void leftClicked(Rectangle selected, int[] index) {
+        if (selected.getFill().equals(Color.GRAY)) {
+            _field.sweep(index[0],index[1]);
+        }
         if (!selected.getFill().equals(Color.RED)){
             // if the user clicks on a mine, then game over
             if (_field.isMine(index[0],index[1])) {
                 gameOver();
             } else {
                 //find all the exposed squares generated from the click
-                ArrayList<int[]> pos = _field.sweep(index[0], index[1]);
-                //for each of the exposed square, clear the square
-                for (int[] clear : pos) {
-                    int row = clear[0];
-                    int col = clear[1];
-                    Rectangle node = (Rectangle) getNode(row, col);
-                    //change the sqaure background to grey colour
-                    node.setFill(Color.GRAY);
-
-                    //get the value to be dsiplayed on the square
-                    int value = _field.getNum(row, col);
-
-                    //if the value is not 0, then display the number, otherwise leave it as a blank square
-                    if (value != 0) {
-                        //set square text to the value
-                        Label label = new Label("" + value);
-                        //format the sqaure
-                        label.setPrefSize(20, 20);
-                        label.setAlignment(Pos.CENTER);
-                        //change text colour to white
-                        label.setTextFill(Color.WHITE);
-                        _pane.add(label, col, row);
-                    }
-                }
+                ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
+                revealNode(pos);
             }
         }
 
     }
 
+    private void revealNode(ArrayList<int[]> list) {
+        System.out.println("revealed");
+        //for each of the exposed square, clear the square
+        for (int[] clear : list) {
+            System.out.println(clear[0] + " " +clear[1]);
+            int row = clear[0];
+            int col = clear[1];
+            Rectangle node = (Rectangle) getNode(row, col);
+            //change the sqaure background to grey colour
+            node.setFill(Color.GRAY);
+
+            //get the value to be dsiplayed on the square
+            int value = _field.getNum(row, col);
+
+            //if the value is not 0, then display the number, otherwise leave it as a blank square
+            if (value != 0) {
+                //set square text to the value
+                Label label = new Label("" + value);
+                //format the sqaure
+                label.setPrefSize(20, 20);
+                label.setAlignment(Pos.CENTER);
+                //change text colour to white
+                label.setTextFill(Color.WHITE);
+                _pane.add(label, col, row);
+                label.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        System.out.println("sweep");
+                        revealNode(_field.sweep(row,col));
+                    }
+                });
+            }
+        }
+    }
 
     private Node getNode (int row, int column) {
         Node result = null;
@@ -172,4 +188,7 @@ public class MainPageController {
         int[] index = {row,col};
         return index;
     }
+
+
+
 }
