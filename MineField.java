@@ -16,7 +16,6 @@ public class MineField {
     private int _mineNum;
 
     private int[][] _map;
-    private boolean[][] _mines;
     private boolean[][] _clearArea;
     private boolean[][] _marked;
 
@@ -54,7 +53,6 @@ public class MineField {
             Arrays.fill(_map[i], 0);
             Arrays.fill(_clearArea[i], false);
             Arrays.fill(_marked[i], false);
-            Arrays.fill(_mines[i], false);
         }
         plantMines();
 
@@ -90,7 +88,6 @@ public class MineField {
             int row = m / _col + SAFEZONE;
             int col = m % _col  + SAFEZONE;
             _map[row][col] = -1;
-            _mines[row][col] = true;
             calcMap(row, col);
         }
     }
@@ -197,7 +194,15 @@ public class MineField {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean hasWon(){
-        return _clearArea == _mines;
+        boolean flag = true;
+        for (int row = SAFEZONE; row < _row - SAFEZONE; row++) {
+            for (int col = SAFEZONE; col < _col - SAFEZONE; col++) {
+                if ((_map[row][col] != -1) && _clearArea[row][col]) {
+                    flag = false;
+                }
+            }
+        }
+        return flag;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
