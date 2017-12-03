@@ -149,10 +149,8 @@ public class MineField {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public ArrayList<int[]> sweep(int row, int col){
+        ArrayList<int[]> sweeplist = new ArrayList<>();
         if (isDecided(row, col)){
-            int fullRow = row + SAFEZONE;
-            int fullCol = col + SAFEZONE;
-            ArrayList<int[]> sweeplist = new ArrayList<>();
             addToSweepList(row-1, col-1, sweeplist);
             addToSweepList(row-1, col, sweeplist);
             addToSweepList(row-1, col+1, sweeplist);
@@ -161,9 +159,17 @@ public class MineField {
             addToSweepList(row+1, col-1, sweeplist);
             addToSweepList(row+1, col, sweeplist);
             addToSweepList(row+1, col+1, sweeplist);
-            return sweeplist;
-        }else{
-            return new ArrayList<>();
+        }
+        return sweeplist;
+    }
+
+    private void addToSweepList(int row, int col, ArrayList<int[]> sweeplist){
+        if (!isMarked(row,col) && !isClicked(row, col)){
+            int[] temp = {row, col};
+            sweeplist.add(temp);
+            if (getNum(row, col) == 0){
+                sweeplist.addAll(ripple(row, col));
+            }
         }
     }
 
@@ -178,16 +184,6 @@ public class MineField {
         if (isMarked(row+1,col)){ i++; }
         if (isMarked(row+1,col+1)){ i++; }
         return i == getNum(row, col);
-    }
-
-    private void addToSweepList(int row, int col, ArrayList<int[]> sweeplist){
-        if (!isMarked(row,col) && !isClicked(row, col)){
-            int[] temp = {row, col};
-            sweeplist.add(temp);
-            if (getNum(row, col) == 0){
-                sweeplist.addAll(ripple(row, col));
-            }
-        }
     }
 
 
