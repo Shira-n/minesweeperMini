@@ -4,9 +4,12 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
@@ -17,7 +20,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import sample.Cell;
+import sample.Hardness;
 import sample.MineField;
 
 import java.util.ArrayList;
@@ -41,21 +46,26 @@ public class MainPageController {
     private int _col;
 
 
+    public void getSetting() {
+        _row = Hardness.getRow();
+        _col = Hardness.getCol();
+        int mine = Hardness.getMine();
+        _field = new MineField(_row, _col, mine);
+    }
+
     @FXML
     public void initialize() {
         _gameOver.setVisible(false);
         //get user customed size here
-        _field = new MineField();
-        int rowNum = _field.getRow();
-        int colNum = _field.getCol();
+        getSetting();
 
         //set up cols and rows of grid pane
-        for (int i = 0; i < rowNum; i++) {
+        for (int i = 0; i < _row; i++) {
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(20);
             _pane.getRowConstraints().add(row);
         }
-        for (int i = 0; i < colNum; i++) {
+        for (int i = 0; i < _col; i++) {
             ColumnConstraints col = new ColumnConstraints();
             col.setPrefWidth(20);
             _pane.getColumnConstraints().add(col);
@@ -64,8 +74,8 @@ public class MainPageController {
         _pane.setVgap(2.0);
 
         //add buttons
-        for (int i = 0; i <colNum; i++) {
-            for (int j = 0; j< rowNum; j++) {
+        for (int i = 0; i <_col; i++) {
+            for (int j = 0; j< _row; j++) {
                 Rectangle rect = new Rectangle(20,20, Color.LIGHTGREY);
                 _pane.add(rect,i,j);
                 //add event handler for each square
@@ -198,19 +208,37 @@ public class MainPageController {
     }
 
 
-    @FXML
-    public void handlePressEasy() {
+    private void newGame() {
+        try {
+            _anchorPane.getScene().getWindow().hide();
+            Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainPage.fxml"));
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Minesweeper mini");
+            primaryStage.setScene(new Scene(root, 1000,1000));
+            primaryStage.show();
+        } catch (Exception ex) {
+        }
+    }
 
+    @FXML
+    public void handlePressEasy(ActionEvent event) {
+        System.out.println("easy");
+        Hardness.setHardness(Hardness.EASY);
+        newGame();
     }
 
     @FXML
     public void handlePressIntermediate(){
-
+        System.out.println("intermediate");
+        Hardness.setHardness(Hardness.INTERMEDIATE);
+        newGame();
     }
 
     @FXML
     public void handlePressExpert() {
-
+        System.out.println("expert");
+        Hardness.setHardness(Hardness.EXPERT);
+        newGame();
     }
 
     @FXML

@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 
 public class MSminiMain extends Application {
 
+    private static final Hardness DEFAULT = Hardness.EASY;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("view/MainPage.fxml"));
@@ -18,7 +20,7 @@ public class MSminiMain extends Application {
 
 
     public static void main(String[] args) {
-
+        Hardness.setHardness(DEFAULT);
         //MineField f = new MineField();
         launch(args);
     }

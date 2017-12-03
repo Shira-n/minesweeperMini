@@ -27,6 +27,7 @@
                               <MenuItem fx:id="_custom" mnemonicParsing="false" onAction="#handlePressCustom" text="Custom" />
                           </items>
                         </Menu>
+                         <MenuItem mnemonicParsing="false" text="Leaderboard"/>
                      </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="View" />
