@@ -6,9 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class MineField {
-    private static int DEFAULT_ROW = 16;
-    private static int DEFAULT_COL = 30;
-    private static int DEFAULT_MINES = 99;
     private static int SAFEZONE = 1;
 
     private int _row;
@@ -43,7 +40,6 @@ public class MineField {
         }
         plantMines(calcClearArea(clearRow, clearCol));
 
-
         //Print out the field
         for (int i = 0; i < _map.length; i++) {
             for (int col = 0; col < _map[0].length; col++) {
@@ -60,24 +56,30 @@ public class MineField {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+        Generate the field
+     */
 
-
+    /**
+     * Calculate the 8 blocks around the first clicked block and return the 9 blocks that are supposed not to contain a
+     * mine.
+     */
     private ArrayList<Integer> calcClearArea(int row, int col){
         ArrayList<Integer> area = new ArrayList<>();
         area.add(row * _col + col);
-        if (isIn(row-1, col-1)){ area.add( (row-1) * _col + col-1 );}
-        if (isIn(row-1, col)){ area.add( (row-1) * _col + col );}
-        if (isIn(row-1, col+1)){ area.add( (row-1) * _col + col+1 );}
-        if (isIn(row, col-1)){ area.add( row * _col + col-1 );}
-        if (isIn(row, col+1)){ area.add( row * _col + col+1 );}
-        if (isIn(row+1, col-1)){ area.add( (row+1) * _col + col-1 );}
-        if (isIn(row+1, col)){ area.add( (row+1) * _col + col );}
-        if (isIn(row+1, col+1)){ area.add( (row+1) * _col + col+1 );}
+        area.add( (row-1) * _col + col-1 );
+        area.add( (row-1) * _col + col );
+        area.add( (row-1) * _col + col+1 );
+        area.add( row * _col + col-1 );
+        area.add( row * _col + col+1 );
+        area.add( (row+1) * _col + col-1 );
+        area.add( (row+1) * _col + col );
+        area.add( (row+1) * _col + col+1 );
         return area;
     }
 
     /**
-     * Randomly set mines in the map
+     * Randomly set mines in the map and make sure 9 blocks around the first clicked block do not contain a mine.
      */
     private void plantMines(ArrayList<Integer> clearArea){
         ArrayList<Integer> field = new ArrayList<>();
@@ -120,8 +122,11 @@ public class MineField {
         return false;
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+        Right click on a unclicked block
+     */
+
     /**
      * Return a list of points that would be revealed by clicking on this rectangle
      */
@@ -149,9 +154,15 @@ public class MineField {
         }
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+        Double click (Mid click) on a clicked block (a number)
+     */
 
+    /**
+     * Automatically reveal unclicked blocks around the input block if the number of marked blocks is the same as the
+     * block indicates.
+     */
     public ArrayList<int[]> sweep(int row, int col){
         ArrayList<int[]> sweeplist = new ArrayList<>();
         if (isDecided(row, col)){
@@ -193,7 +204,6 @@ public class MineField {
         return i == getNum(row, col);
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean hasWon(){
@@ -212,6 +222,7 @@ public class MineField {
     /*
         Setters
      */
+
     public void mark(int row, int col){
         int fullRow = row + SAFEZONE;
         int fullCol = col + SAFEZONE;
@@ -221,7 +232,6 @@ public class MineField {
             _marked[fullRow][fullCol] = true;
         }
     }
-
 
     /*
         Getters
@@ -241,7 +251,6 @@ public class MineField {
     public int getMineNum(){
         return _mineNum;
     }
-
 
     /*
         Deciders

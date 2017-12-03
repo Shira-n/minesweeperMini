@@ -37,8 +37,6 @@ public class MainPageController {
     private boolean _firstClick;
     private MineField _field;
 
-    private ArrayList<Node> checkedSquare = new ArrayList<Node>();
-
     private int _row;
     private int _col;
     private int _mineNum;
@@ -95,8 +93,6 @@ public class MainPageController {
     /**
      * Method handles when user performs a right click on a certain square. If the square is already
      * flagged (red color) then change it back to un-flagged (grey), and vice versa.
-     * @param selected
-     * @param index
      */
     public void rightClick(Rectangle selected, int[] index) {
         //if the square has been flagged before, un-flag it
