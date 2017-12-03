@@ -208,9 +208,9 @@ public class MineField {
 
     public boolean hasWon(){
         boolean flag = true;
-        for (int row = SAFEZONE; row < _row - SAFEZONE; row++) {
-            for (int col = SAFEZONE; col < _col - SAFEZONE; col++) {
-                if ((_map[row][col] != -1) && _clearArea[row][col]) {
+        for (int row = 0; row < _row; row++) {
+            for (int col = 0; col < _col; col++) {
+                if (!(isMine(row, col) && !isClicked(row, col)) {
                     flag = false;
                 }
             }
