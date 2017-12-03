@@ -182,6 +182,7 @@ public class MineField {
         if ( isIn(row, col) && !isMarked(row,col) && !isClicked(row, col)){
                 int[] temp = {row, col};
                 sweeplist.add(temp);
+                _clearArea[row + SAFEZONE][col + SAFEZONE] = true;
                 if (getNum(row, col) == 0) {
                     sweeplist.addAll(ripple(row, col));
                 }
@@ -210,8 +211,9 @@ public class MineField {
         boolean flag = true;
         for (int row = 0; row < _row; row++) {
             for (int col = 0; col < _col; col++) {
-                if (isIn(row, col) && !isMine(row, col) && !isClicked(row, col)){
+                if (isIn(row, col) && !isClicked(row, col) && !isMine(row, col)){
                     flag = false;
+                    System.out.print(getNum(row, col)+ " ");
                 }
             }
         }
