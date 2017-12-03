@@ -1,9 +1,9 @@
 package sample;
 
 public enum Hardness {
-    EASY(15, 30, 20),
-    INTERMEDIATE(20,30,25),
-    EXPERT(30,40,50);
+    EASY(8, 8, 10),
+    INTERMEDIATE(16,16,40),
+    EXPERT(16,32,99);
 
     private int _row;
     private int _col;

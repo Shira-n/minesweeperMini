@@ -19,31 +19,18 @@ public class MineField {
     private boolean[][] _clearArea;
     private boolean[][] _marked;
 
-    /**
-     * Generate a mine field using default data
-     */
-    public MineField(){
-        _row = DEFAULT_ROW;
-        _col = DEFAULT_COL;
-        _mineNum = DEFAULT_MINES;
-        generateField();
-    }
-
-    /**
-     * Allow custom mine fields
-     */
-    public MineField(int row, int col, int mineNum)throws MineNumExceedException{
+    public MineField(int row, int col, int mineNum, int clearRow, int clearCol)throws MineNumExceedException{
         _row = row;
         _col = col;
         _mineNum = mineNum;
-        if(mineNum > _row *_col){
+        if(mineNum > _row *_col - 10){
             throw new MineNumExceedException();
         }else {
-            generateField();
+            generateField(clearRow, clearCol);
         }
     }
 
-    private void generateField(){
+    private void generateField(int clearRow, int clearCol){
         int realRow = _row + 2 * SAFEZONE;
         int realCol = _col + 2 * SAFEZONE;
         _map = new int[realRow][realCol];
@@ -54,7 +41,7 @@ public class MineField {
             Arrays.fill(_clearArea[i], false);
             Arrays.fill(_marked[i], false);
         }
-        plantMines();
+        plantMines(calcClearArea(clearRow, clearCol));
 
 
         //Print out the field
@@ -74,13 +61,30 @@ public class MineField {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    private ArrayList<Integer> calcClearArea(int row, int col){
+        ArrayList<Integer> area = new ArrayList<>();
+        area.add(row * _col + col);
+        if (isIn(row-1, col-1)){ area.add( (row-1) * _col + col-1 );}
+        if (isIn(row-1, col)){ area.add( (row-1) * _col + col );}
+        if (isIn(row-1, col+1)){ area.add( (row-1) * _col + col+1 );}
+        if (isIn(row, col-1)){ area.add( row * _col + col-1 );}
+        if (isIn(row, col+1)){ area.add( row * _col + col+1 );}
+        if (isIn(row+1, col-1)){ area.add( (row+1) * _col + col-1 );}
+        if (isIn(row+1, col)){ area.add( (row+1) * _col + col );}
+        if (isIn(row+1, col+1)){ area.add( (row+1) * _col + col+1 );}
+        return area;
+    }
+
     /**
      * Randomly set mines in the map
      */
-    private void plantMines(){
+    private void plantMines(ArrayList<Integer> clearArea){
         ArrayList<Integer> field = new ArrayList<>();
         for (int i = 0; i < _row * _col; i++){
-            field.add(i);
+            if (!clearArea.contains(i)) {
+                field.add(i);
+            }
         }
         Collections.shuffle(field);
         List<Integer> mineList = field.subList(0, _mineNum);
@@ -239,6 +243,9 @@ public class MineField {
     }
 
 
+    /*
+        Deciders
+     */
     public boolean isMine(int row, int col){ return _map[row + SAFEZONE][col + SAFEZONE] == -1; }
 
     public boolean isClicked(int row, int col){ return _clearArea[row + SAFEZONE][col + SAFEZONE]; }

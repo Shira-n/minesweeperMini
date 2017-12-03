@@ -5,12 +5,10 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -21,7 +19,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import sample.Cell;
 import sample.Hardness;
 import sample.MineField;
 
@@ -37,29 +34,28 @@ public class MainPageController {
     @FXML
     private Label _gameOver;
 
+    private boolean _firstClick;
     private MineField _field;
 
     private ArrayList<Node> checkedSquare = new ArrayList<Node>();
 
     private int _row;
-
     private int _col;
-
-
-    public void getSetting() {
-        _row = Hardness.getRow();
-        _col = Hardness.getCol();
-        int mine = Hardness.getMine();
-        _field = new MineField(_row, _col, mine);
-    }
+    private int _mineNum;
 
     @FXML
     public void initialize() {
         _gameOver.setVisible(false);
-        //get user customed size here
-        getSetting();
 
-        //set up cols and rows of grid pane
+        //get user customised parameters
+        _row = Hardness.getRow();
+        _col = Hardness.getCol();
+        _mineNum = Hardness.getMine();
+
+        //Set up blank field, waiting for the first click
+        _firstClick = true;
+
+        //Set up cols and rows of grid pane
         for (int i = 0; i < _row; i++) {
             RowConstraints row = new RowConstraints();
             row.setPrefHeight(20);
@@ -73,7 +69,7 @@ public class MainPageController {
         _pane.setHgap(2.0);
         _pane.setVgap(2.0);
 
-        //add buttons
+        //Add buttons
         for (int i = 0; i <_col; i++) {
             for (int j = 0; j< _row; j++) {
                 Rectangle rect = new Rectangle(20,20, Color.LIGHTGREY);
@@ -84,19 +80,16 @@ public class MainPageController {
                     public void handle(MouseEvent event) {
                         //if the square senses a right click action
                         if (event.getButton() == MouseButton.SECONDARY) {
-                            System.out.println("Right");
                             rightClick((Rectangle)event.getSource(), getIndex(event.getSource()));
                         }
                         //when the square senses a left click action
                         else {
-                            System.out.println("Left");
                             leftClicked((Rectangle)event.getSource(), getIndex(event.getSource()));
                         }
                     }
                 });
             }
         }
-
     }
 
     /**
@@ -120,21 +113,25 @@ public class MainPageController {
     /**
      * Method is called when the user perform left click on a certain square. If the square is a mine,
      * then game over. Otherwise, it clears the square and check the surrounding squares.
-     * @param selected
-     * @param index
      */
     public void leftClicked(Rectangle selected, int[] index) {
-        if (!selected.getFill().equals(Color.RED)){
-            // if the user clicks on a mine, then game over
-            if (_field.isMine(index[0],index[1])) {
-                gameOver(selected);
-            } else {
-                //find all the exposed squares generated from the click
-                ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
-                revealNodes(pos);
+        if (_firstClick){               //Generate a new field that the first click block must be 0
+            _firstClick = false;
+            _field = new MineField(_row, _col, _mineNum, index[0], index[1]);
+            ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
+            revealNodes(pos);
+        }else {
+            if (!selected.getFill().equals(Color.RED)) {
+                // if the user clicks on a mine, then game over
+                if (_field.isMine(index[0], index[1])) {
+                    gameOver(selected);
+                } else {
+                    //find all the exposed squares generated from the click
+                    ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
+                    revealNodes(pos);
+                }
             }
         }
-
     }
 
     private void revealNodes(ArrayList<int[]> list) {
