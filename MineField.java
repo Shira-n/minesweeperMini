@@ -210,7 +210,7 @@ public class MineField {
         boolean flag = true;
         for (int row = 0; row < _row; row++) {
             for (int col = 0; col < _col; col++) {
-                if (!(isMine(row, col) && !isClicked(row, col)) {
+                if (!isMine(row, col) && !isClicked(row, col)){
                     flag = false;
                 }
             }

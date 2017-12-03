@@ -18,7 +18,7 @@ public class CustomController {
 
     @FXML
     public void handlePressCancel(ActionEvent event) {
-        ((Node) _row).getScene().getWindow().
+        //((Node) _row).getScene().getWindow().
     }
 
     @FXML
