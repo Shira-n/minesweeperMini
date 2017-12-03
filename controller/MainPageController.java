@@ -245,4 +245,9 @@ public class MainPageController {
     public void handlePressCustom() {
 
     }
+
+    @FXML
+    public void handlePressRestart() {
+        newGame();
+    }
 }
