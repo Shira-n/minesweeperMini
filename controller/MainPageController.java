@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +30,7 @@ public class MainPageController {
     private GridPane _pane;
 
     @FXML
-    private AnchorPane _anchorPane;
+    private SplitPane _splitPane;
 
     @FXML
     private Label _gameOver;
@@ -43,6 +44,7 @@ public class MainPageController {
 
     @FXML
     public void initialize() {
+
         _gameOver.setVisible(false);
 
         //get user customised parameters
@@ -203,11 +205,11 @@ public class MainPageController {
 
     private void newGame() {
         try {
-            _anchorPane.getScene().getWindow().hide();
+            _pane.getScene().getWindow().hide();
             Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainPage.fxml"));
             Stage primaryStage = new Stage();
             primaryStage.setTitle("Minesweeper mini");
-            primaryStage.setScene(new Scene(root, 1000,1000));
+            primaryStage.setScene(new Scene(root));
             primaryStage.show();
         } catch (Exception ex) {
         }
