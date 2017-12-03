@@ -180,13 +180,14 @@ public class MineField {
 
     private void addToSweepList(int row, int col, ArrayList<int[]> sweeplist){
         if ( isIn(row, col) && !isMarked(row,col) && !isClicked(row, col)){
+            if (getNum(row, col) == 0) {
+                sweeplist.addAll(ripple(row, col));
+            }else {
                 int[] temp = {row, col};
                 sweeplist.add(temp);
                 _clearArea[row + SAFEZONE][col + SAFEZONE] = true;
-                if (getNum(row, col) == 0) {
-                    sweeplist.addAll(ripple(row, col));
-                }
             }
+        }
     }
 
     /**
@@ -213,11 +214,9 @@ public class MineField {
             for (int col = 0; col < _col; col++) {
                 if (isIn(row, col) && !isClicked(row, col) && !isMine(row, col)){
                     flag = false;
-                    System.out.print(getNum(row, col)+ " ");
                 }
             }
         }
-        System.out.println(""+flag);
         return flag;
     }
 
