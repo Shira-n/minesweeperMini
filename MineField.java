@@ -164,13 +164,14 @@ public class MineField {
     }
 
     private void addToSweepList(int row, int col, ArrayList<int[]> sweeplist){
-        if (!isMarked(row,col) && !isClicked(row, col)){
-            int[] temp = {row, col};
-            sweeplist.add(temp);
-            if (getNum(row, col) == 0){
-                sweeplist.addAll(ripple(row, col));
+        if (!isMarked(row,col) && !isClicked(row, col) && isIn(row, col)){
+                int[] temp = {row, col};
+                sweeplist.add(temp);
+                if (getNum(row, col) == 0) {
+                    sweeplist.addAll(ripple(row, col));
+                }
             }
-        }
+
     }
 
     private boolean isDecided(int row, int col){
@@ -242,5 +243,10 @@ public class MineField {
 
     public boolean isMarked(int row, int col){ return _marked[row + SAFEZONE][col + SAFEZONE]; }
 
+    private boolean isIn(int row, int col){
+        int fullRow = row + SAFEZONE;
+        int fullCol = col + SAFEZONE;
+        return ((fullRow >= SAFEZONE) && (fullRow < _row - SAFEZONE) && (fullCol >= SAFEZONE ) && (fullCol < _col - SAFEZONE));
+    }
 
 }
