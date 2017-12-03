@@ -3,6 +3,7 @@ package sample.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.stage.Stage;
 
 import java.awt.*;
 
@@ -18,7 +19,8 @@ public class CustomController {
 
     @FXML
     public void handlePressCancel(ActionEvent event) {
-        //((Node) _row).getScene().getWindow().
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     @FXML

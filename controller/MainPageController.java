@@ -42,6 +42,8 @@ public class MainPageController {
     private int _col;
     private int _mineNum;
 
+    private int _left;
+
     @FXML
     public void initialize() {
 
@@ -51,6 +53,7 @@ public class MainPageController {
         _row = Hardness.getRow();
         _col = Hardness.getCol();
         _mineNum = Hardness.getMine();
+        _left = _mineNum;
 
         //Set up blank field, waiting for the first click
         _firstClick = true;
@@ -118,12 +121,13 @@ public class MainPageController {
         _field.mark(index[0], index[1]);
         if (selected.getFill().equals(Color.RED)) {
             selected.setFill(Color.LIGHTGREY);
+            _left++;
         }
         //if the sqaure has not been flagged, then flag
         else {
             selected.setFill(Color.RED);
+            _left--;
         }
-        checkWon();
     }
 
     /**
