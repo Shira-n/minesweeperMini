@@ -215,6 +215,7 @@ public class MineField {
                 }
             }
         }
+        System.out.println(""+flag);
         return flag;
     }
 

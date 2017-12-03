@@ -40,7 +40,7 @@
               </menus>
             </MenuBar>
             <Button mnemonicParsing="false" onMouseClicked="#handlePressRestart" text="Restart" />
-            <Label fx:id="_gameOver" text="Label" />
+            <Label fx:id="_gameOver" text="Game Over" />
         </items>
       </ToolBar>
       <GridPane fx:id="_pane" alignment="CENTER">
