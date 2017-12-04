@@ -118,7 +118,10 @@ public class MainPageController {
      */
     public void rightClick(Rectangle selected, int[] index) {
         //if the square has been flagged before, un-flag it
-        _field.mark(index[0], index[1]);
+        if (!_firstClick) {
+            _field.mark(index[0], index[1]);
+        }
+
         if (selected.getFill().equals(Color.RED)) {
             selected.setFill(Color.LIGHTGREY);
             _left++;
