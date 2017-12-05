@@ -19,9 +19,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.Hardness;
 import sample.MineField;
+import sample.MineNumExceedException;
 
 import java.util.ArrayList;
 
@@ -34,6 +36,9 @@ public class MainPageController {
 
     @FXML
     private Label _gameOver;
+
+    @FXML
+    private Label _leftNum;
 
     private boolean _firstClick;
     private MineField _field;
@@ -54,6 +59,7 @@ public class MainPageController {
         _col = Hardness.getCol();
         _mineNum = Hardness.getMine();
         _left = _mineNum;
+        _leftNum.setText(""+_left);
 
         //Set up blank field, waiting for the first click
         _firstClick = true;
@@ -122,11 +128,13 @@ public class MainPageController {
         if (selected.getFill().equals(Color.RED)) {
             selected.setFill(Color.LIGHTGREY);
             _left++;
+            _leftNum.setText(""+_left);
         }
         //if the sqaure has not been flagged, then flag
         else {
             selected.setFill(Color.RED);
             _left--;
+            _leftNum.setText(""+_left);
         }
     }
 
@@ -137,9 +145,13 @@ public class MainPageController {
     public void leftClicked(Rectangle selected, int[] index) {
         if (_firstClick){               //Generate a new field that the first click block must be 0
             _firstClick = false;
-            _field = new MineField(_row, _col, _mineNum, index[0], index[1]);
-            ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
-            revealNodes(pos);
+            try {
+                _field = new MineField(_row, _col, _mineNum, index[0], index[1]);
+                ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
+                revealNodes(pos);
+            }catch (MineNumExceedException e){
+                //TODO popup or sth to indicate # of mines out of limit
+            }
         }else {
             if (!selected.getFill().equals(Color.RED)) {
                 // if the user clicks on a mine, then game over
@@ -236,6 +248,7 @@ public class MainPageController {
             System.out.println("won");
             _gameOver.setText("won");
             _gameOver.setVisible(true);
+            _pane.setDisable(true);
         }
     }
 
@@ -275,7 +288,22 @@ public class MainPageController {
     }
 
     @FXML
-    public void handlePressCustom() {
+    public void handlePressCustom(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/Custom.fxml"));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initOwner(_pane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            stage.showAndWait();
+        }
+        catch (Exception e) {
+
+        }
+
 
     }
 
