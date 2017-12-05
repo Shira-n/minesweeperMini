@@ -316,6 +316,7 @@ public class MainPageController {
         catch (Exception e) {
 
         }
+        newGame();
 
 
     }
