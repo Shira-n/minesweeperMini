@@ -13,7 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -80,8 +79,8 @@ public class MainPageController {
             col.setPrefWidth(20);
             _pane.getColumnConstraints().add(col);
         }
-        _pane.setHgap(2.0);
-        _pane.setVgap(2.0);
+        _pane.setHgap(1.0);
+        _pane.setVgap(1.0);
     }
 
     /**
