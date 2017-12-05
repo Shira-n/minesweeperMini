@@ -47,6 +47,7 @@ public class MainPageController {
     private int _col;
     private int _mineNum;
 
+    private ArrayList<int[]> _premarked = new ArrayList<>();
     private int _left;
 
     @FXML
@@ -126,6 +127,12 @@ public class MainPageController {
         //if the square has been flagged before, un-flag it
         if (!_firstClick) {
             _field.mark(index[0], index[1]);
+        }else{
+            if (_premarked.contains(index)){
+                _premarked.remove(index);
+            }else{
+                _premarked.add(index);
+            }
         }
 
         if (selected.getFill().equals(Color.RED)) {
@@ -150,6 +157,9 @@ public class MainPageController {
             _firstClick = false;
             try {
                 _field = new MineField(_row, _col, _mineNum, index[0], index[1]);
+                for (int[] i : _premarked){
+                    _field.mark(i[0], i[1]);
+                }
                 ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
                 revealNodes(pos);
             }catch (MineNumExceedException e){

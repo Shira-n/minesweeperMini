@@ -193,18 +193,36 @@ public class MineField {
     /**
      * Checks if the number of marked area around one block is the same to its number
      */
-    private boolean isDecided(int row, int col){
+    private boolean isDecided(int row, int col) {
         int i = 0;
-        if (isMarked(row-1,col-1)){ i++; }
-        if (isMarked(row-1,col)){ i++; }
-        if (isMarked(row-1,col+1)){ i++; }
-        if (isMarked(row,col+1)){ i++; }
-        if (isMarked(row,col-1)){ i++; }
-        if (isMarked(row+1,col-1)){ i++; }
-        if (isMarked(row+1,col)){ i++; }
-        if (isMarked(row+1,col+1)){ i++; }
+        if (isMarked(row - 1, col - 1)) {
+            i++;
+        }
+        if (isMarked(row - 1, col)) {
+            i++;
+        }
+        if (isMarked(row - 1, col + 1)) {
+            i++;
+        }
+        if (isMarked(row, col + 1)) {
+            i++;
+        }
+        if (isMarked(row, col - 1)) {
+            i++;
+        }
+        if (isMarked(row + 1, col - 1)) {
+            i++;
+        }
+        if (isMarked(row + 1, col)) {
+            i++;
+        }
+        if (isMarked(row + 1, col + 1)) {
+            i++;
+        }
         return i == getNum(row, col);
     }
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
