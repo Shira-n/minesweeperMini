@@ -38,14 +38,12 @@ public class CustomController {
             _row = Integer.parseInt(row.getText());
             _col = Integer.parseInt(col.getText());
             _mine = Integer.parseInt(mine.getText());
+
+            checkInput(event);
         }
         catch (NumberFormatException e) {
             alert("The inputs must be only numbers");
         }
-        Hardness.setCustom(_row,_col,_mine);
-        Hardness.setHardness(Hardness.CUSTOM);
-
-        closeWindow(event);
     }
 
 
@@ -60,6 +58,21 @@ public class CustomController {
     private void closeWindow(MouseEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    private void checkInput(MouseEvent event) {
+        if (_row < 1 || _col < 1 || _mine <0) {
+            alert("Input out of range");
+        }
+        else if (_row*_col-9 < _mine) {
+            alert("too many mines");
+        }
+        else {
+            Hardness.setCustom(_row,_col,_mine);
+            Hardness.setHardness(Hardness.CUSTOM);
+
+            closeWindow(event);
+        }
     }
 
 }
