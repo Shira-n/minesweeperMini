@@ -16,15 +16,11 @@ public class MineField {
     private boolean[][] _clearArea;
     private boolean[][] _marked;
 
-    public MineField(int row, int col, int mineNum, int clearRow, int clearCol)throws MineNumExceedException{
+    public MineField(int row, int col, int mineNum, int clearRow, int clearCol){
         _row = row;
         _col = col;
         _mineNum = mineNum;
-        if(mineNum > _row *_col - 10){
-            throw new MineNumExceedException();
-        }else {
-            generateField(clearRow, clearCol);
-        }
+        generateField(clearRow, clearCol);
     }
 
     private void generateField(int clearRow, int clearCol){

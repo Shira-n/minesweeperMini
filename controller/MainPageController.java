@@ -23,7 +23,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import sample.Hardness;
 import sample.MineField;
-import sample.MineNumExceedException;
 
 import java.util.ArrayList;
 
@@ -155,16 +154,12 @@ public class MainPageController {
     public void leftClicked(Rectangle selected, int[] index) {
         if (_firstClick){               //Generate a new field that the first click block must be 0
             _firstClick = false;
-            try {
-                _field = new MineField(_row, _col, _mineNum, index[0], index[1]);
-                for (int[] i : _premarked){
-                    _field.mark(i[0], i[1]);
-                }
-                ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
-                revealNodes(pos);
-            }catch (MineNumExceedException e){
-                //TODO popup or sth to indicate # of mines out of limit
+            _field = new MineField(_row, _col, _mineNum, index[0], index[1]);
+            for (int[] i : _premarked){
+                _field.mark(i[0], i[1]);
             }
+            ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
+            revealNodes(pos);
         }else {
             if (!selected.getFill().equals(Color.RED)) {
                 // if the user clicks on a mine, then game over
