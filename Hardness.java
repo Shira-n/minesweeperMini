@@ -3,7 +3,8 @@ package sample;
 public enum Hardness {
     EASY(8, 8, 10),
     INTERMEDIATE(16,16,40),
-    EXPERT(16,32,99);
+    EXPERT(16,32,99),
+    CUSTOM(0,0,0);
 
     private int _row;
     private int _col;
@@ -21,6 +22,12 @@ public enum Hardness {
         _hardness = hardness;
     }
 
+
+    public static void setCustom(int row, int col, int mine) {
+        CUSTOM._row = row;
+        CUSTOM._col = col;
+        CUSTOM._mine = mine;
+    }
 
     public static int getRow() {
         return _hardness._row;
