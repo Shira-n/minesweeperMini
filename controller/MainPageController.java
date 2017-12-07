@@ -1,5 +1,8 @@
 package sample.controller;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,14 +24,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import sample.Hardness;
 import sample.MineField;
 
 import java.util.ArrayList;
 
 public class MainPageController {
+
+    private static final Integer FINISHTIME = 500;
+
+    private Integer timeSeconds = 0;
+
     @FXML
     private GridPane _pane;
+
+    @FXML
+    private Label timerLabel;
 
     @FXML
     private SplitPane _splitPane;
@@ -42,6 +54,8 @@ public class MainPageController {
     private boolean _firstClick;
     private MineField _field;
 
+    private static Timeline _timeline;
+
     private int _row;
     private int _col;
     private int _mineNum;
@@ -53,6 +67,7 @@ public class MainPageController {
     public void initialize() {
 
         _gameOver.setVisible(false);
+        timerLabel.setText(timeSeconds.toString());
 
         //get user customised parameters
         _row = Hardness.getRow();
@@ -103,6 +118,22 @@ public class MainPageController {
                 rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
+                        if(_timeline == null) {
+                            timerLabel.setText(timeSeconds.toString());
+                            _timeline = new Timeline();
+                            _timeline.setCycleCount(Timeline.INDEFINITE);
+                            _timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    timeSeconds++;
+                                    timerLabel.setText(timeSeconds.toString());
+                                    if (timeSeconds > FINISHTIME) {
+                                        _timeline.stop();
+                                    }
+                                }
+                            }));
+                            _timeline.play();
+                        }
                         //if the square senses a right click action
                         if (event.getButton() == MouseButton.SECONDARY) {
                             rightClick((Rectangle)event.getSource(), getIndex(event.getSource()));
@@ -248,6 +279,7 @@ public class MainPageController {
         System.out.println("Game Over");
         _gameOver.setVisible(true);
         _pane.setDisable(true);
+        _timeline.stop();
 
     }
 
@@ -257,6 +289,7 @@ public class MainPageController {
             _gameOver.setText("won");
             _gameOver.setVisible(true);
             _pane.setDisable(true);
+            _timeline.stop();
         }
     }
 

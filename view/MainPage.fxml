@@ -1,71 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.ToolBar?>
-<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-<SplitPane dividerPositions="0.1490066225165563" orientation="VERTICAL" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainPageController">
-   <items>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" style="-fx-background-color: grey;">
-         <items>
-            <ToolBar>
-              <items>
-                  <MenuBar style="-fx-background-color: transparent;">
-                    <menus>
-                      <Menu mnemonicParsing="false" text="Game">
-                           <items>
-                              <Menu mnemonicParsing="false" text="New Game">
-                                <items>
-                                  <MenuItem fx:id="_easy" mnemonicParsing="false" onAction="#handlePressEasy" text="Easy" />
-                                    <MenuItem fx:id="_intermediate" mnemonicParsing="false" onAction="#handlePressIntermediate" text="Intermediate" />
-                                    <MenuItem fx:id="_expert" mnemonicParsing="false" onAction="#handlePressExpert" text="Expert" />
-                                    <MenuItem fx:id="_custom" mnemonicParsing="false" onAction="#handlePressCustom" text="Custom" />
-                                </items>
-                              </Menu>
-                               <MenuItem mnemonicParsing="false" text="Leaderboard" />
-                           </items>
-                      </Menu>
-                      <Menu mnemonicParsing="false" text="View" />
-                      <Menu mnemonicParsing="false" text="Help">
-                        <items>
-                          <MenuItem mnemonicParsing="false" text="About" />
-                        </items>
-                      </Menu>
-                    </menus>
-                  </MenuBar>
-                  <Button mnemonicParsing="false" onMouseClicked="#handlePressRestart" text="Restart" />
-                  <Label fx:id="_gameOver" text="Game Over" />
-              </items>
-            </ToolBar>
-            <Label text="Mine" fx:id="_leftNum"/>
-         </items>
-      </SplitPane>
+<VBox alignment="CENTER" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainPageController">
+   <children>
+      <ToolBar>
+        <items>
+            <MenuBar style="-fx-background-color: transparent;">
+              <menus>
+                <Menu mnemonicParsing="false" style="-fx-text-fill: white;" text="Game">
+                     <items>
+                      <MenuItem fx:id="_easy" mnemonicParsing="false" onAction="#handlePressEasy" text="Easy" />
+                        <MenuItem fx:id="_intermediate" mnemonicParsing="false" onAction="#handlePressIntermediate" text="Intermediate" />
+                        <MenuItem fx:id="_expert" mnemonicParsing="false" onAction="#handlePressExpert" text="Expert" />
+                        <MenuItem fx:id="_custom" mnemonicParsing="false" onAction="#handlePressCustom" text="Custom" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                         <MenuItem mnemonicParsing="false" text="Leaderboard" />
+                     </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <Label fx:id="_gameOver" text="Game Over" />
+        </items>
+      </ToolBar>
+      <HBox alignment="CENTER" spacing="20.0">
+         <children>
+            <Label fx:id="_leftNum" text="Mine" textFill="WHITE" />
+            <Button mnemonicParsing="false" onMouseClicked="#handlePressRestart" style="-fx-background-color: lightgrey;" text="Restart" textFill="#5b5b5b" />
+            <Label fx:id="timerLabel" text="Time" textFill="WHITE" />
+         </children>
+      </HBox>
       <GridPane fx:id="_pane" alignment="CENTER">
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
-         <padding>
-            <Insets left="100.0" top="60.0" />
-         </padding>
       </GridPane>
-   </items>
-</SplitPane>
+   </children>
+</VBox>
