@@ -1,7 +1,6 @@
 package sample.controller;
 
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,6 +22,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -93,12 +93,12 @@ public class MainPageController {
         //Set up cols and rows of grid pane
         for (int i = 0; i < _row; i++) {
             RowConstraints row = new RowConstraints();
-            row.setPrefHeight(20);
+            row.setPrefHeight(24);
             _pane.getRowConstraints().add(row);
         }
         for (int i = 0; i < _col; i++) {
             ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(20);
+            col.setPrefWidth(24);
             _pane.getColumnConstraints().add(col);
         }
         _pane.setHgap(1.0);
@@ -112,7 +112,7 @@ public class MainPageController {
         //Add buttons
         for (int i = 0; i <_col; i++) {
             for (int j = 0; j< _row; j++) {
-                Rectangle rect = new Rectangle(20,20, Color.LIGHTGREY);
+                Rectangle rect = new Rectangle(24,24, Color.LIGHTGREY);
                 _pane.add(rect,i,j);
                 //add event handler for each square
                 rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -236,7 +236,8 @@ public class MainPageController {
             //set square text to the value
             Label label = new Label("" + value);
             //format the sqaure
-            label.setPrefSize(20, 20);
+            label.setPrefSize(24, 24);
+            label.setFont(new Font("System", 15));
             label.setAlignment(Pos.CENTER);
             //change text colour to white
             label.setTextFill(Color.WHITE);
@@ -285,7 +286,6 @@ public class MainPageController {
     private void checkWon() {
         if (_field.hasWon()){
             _restart.setText("(*w*)");
-            System.out.println("won");
             _pane.setDisable(true);
             _timeline.stop();
         }
@@ -307,21 +307,18 @@ public class MainPageController {
 
     @FXML
     public void handlePressEasy(ActionEvent event) {
-        System.out.println("easy");
         Hardness.setHardness(Hardness.EASY);
         newGame();
     }
 
     @FXML
     public void handlePressIntermediate(){
-        System.out.println("intermediate");
         Hardness.setHardness(Hardness.INTERMEDIATE);
         newGame();
     }
 
     @FXML
     public void handlePressExpert() {
-        System.out.println("expert");
         Hardness.setHardness(Hardness.EXPERT);
         newGame();
     }

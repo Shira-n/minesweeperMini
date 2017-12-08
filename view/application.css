@@ -25,7 +25,7 @@
     -fx-background-color: lightgrey;
 }
 
-.menu:hover, .menu:showing{
+.menu:hover, .menu:showing {
     -fx-background-color: lightgrey;
 
 }

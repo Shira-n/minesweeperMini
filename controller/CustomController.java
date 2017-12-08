@@ -1,7 +1,5 @@
 package sample.controller;
 
-import com.sun.glass.ui.Window;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -61,11 +59,14 @@ public class CustomController {
     }
 
     private void checkInput(MouseEvent event) {
-        if (_row < 1 || _col < 1 || _mine <0) {
+        if (_row < 4 || _col < 4 || _mine <0) {
             alert("Input out of range");
         }
         else if (_row*_col-9 < _mine) {
             alert("too many mines");
+        }
+        else if (_row > 30 || _col > 30) {
+            alert("Too big");
         }
         else {
             Hardness.setCustom(_row,_col,_mine);

@@ -36,7 +36,7 @@ public class MineField {
         }
         plantMines(calcClearArea(clearRow, clearCol));
 
-        //Print out the field
+        /*Print out the field
         for (int i = 0; i < _map.length; i++) {
             for (int col = 0; col < _map[0].length; col++) {
                 if (_map[i][col] == -1){
@@ -48,6 +48,7 @@ public class MineField {
             System.out.print("\n");
         }
         System.out.print("\n");
+        */
 
     }
 
