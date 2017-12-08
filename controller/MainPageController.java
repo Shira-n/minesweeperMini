@@ -27,6 +27,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import sample.Hardness;
+import sample.MSminiMain;
 import sample.MineField;
 
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class MainPageController {
 
     private static final Integer FINISHTIME = 500;
 
-    private Integer timeSeconds = 0;
+    private int timeSeconds;
 
     @FXML
     private GridPane _pane;
@@ -67,7 +68,8 @@ public class MainPageController {
     @FXML
     public void initialize() {
         _restart.setText("('w')");
-        timerLabel.setText(timeSeconds.toString());
+        timeSeconds = 0;
+        timerLabel.setText(timeSeconds + "");
 
         //get user customised parameters
         _row = Hardness.getRow();
@@ -119,14 +121,14 @@ public class MainPageController {
                     @Override
                     public void handle(MouseEvent event) {
                         if(_timeline == null) {
-                            timerLabel.setText(timeSeconds.toString());
+                            timerLabel.setText(timeSeconds + "");
                             _timeline = new Timeline();
                             _timeline.setCycleCount(Timeline.INDEFINITE);
                             _timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
                                 @Override
                                 public void handle(ActionEvent event) {
                                     timeSeconds++;
-                                    timerLabel.setText(timeSeconds.toString());
+                                    timerLabel.setText(timeSeconds + "");
                                     if (timeSeconds > FINISHTIME) {
                                         _timeline.stop();
                                     }
@@ -356,6 +358,21 @@ public class MainPageController {
      */
     private void newGame() {
         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/PopUp.fxml"));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initOwner(_pane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            stage.showAndWait();
+        }
+        catch (Exception e) {
+
+        }
+
+        try {
             _pane.getScene().getWindow().hide();
             Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainPage.fxml"));
             Stage primaryStage = new Stage();
@@ -366,5 +383,38 @@ public class MainPageController {
         } catch (Exception ex) {
         }
     }
+
+
+
+    private void updateRecord(){
+        switch (Hardness.getHardness()){
+            case EASY:
+                if (timeSeconds < MSminiMain.EAZ_RECORD){
+                    MSminiMain.EAZ_KEEPER = enterName();
+                }
+                break;
+            case INTERMEDIATE:
+                if (timeSeconds < MSminiMain.MED_RECORD){
+                    MSminiMain.MED_KEEPER = enterName();
+                }
+                break;
+            case EXPERT:
+                if (timeSeconds < MSminiMain.EXP_RECORD){
+                    MSminiMain.EXP_KEEPER = enterName();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private String enterName(){
+        String name = "";
+        if (name.length() < 1){
+            name = "unknow";
+        }
+        return name;
+    }
+
 
 }

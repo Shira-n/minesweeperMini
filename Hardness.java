@@ -41,4 +41,5 @@ public enum Hardness {
         return _hardness._mine;
     }
 
+    public static Hardness getHardness() {return _hardness; }
 }

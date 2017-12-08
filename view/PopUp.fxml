@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PopUpController">
+
+      <Label layoutX="228.0" layoutY="31.0" text="Label" />
+      <TextField fx:id="_nameField" layoutX="308.0" layoutY="122.0" />
+      <Button layoutX="154.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#handlePressAnon" text="Anonymous" />
+      <Button layoutX="362.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" text="OK" />
+
+</AnchorPane>
