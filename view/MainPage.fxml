@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -11,11 +12,11 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainPageController">
+<VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.MainPageController">
    <children>
-      <ToolBar>
+      <ToolBar maxHeight="100.0" prefHeight="0.0" stylesheets="@application.css">
         <items>
-            <MenuBar style="-fx-background-color: transparent;">
+            <MenuBar style="-fx-background-color: transparent;" stylesheets="@application.css">
               <menus>
                 <Menu mnemonicParsing="false" style="-fx-text-fill: white;" text="Game">
                      <items>
@@ -34,17 +35,36 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <Label fx:id="_gameOver" text="Game Over" />
         </items>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets top="1.0" />
+         </padding>
       </ToolBar>
       <HBox alignment="CENTER" spacing="20.0">
          <children>
-            <Label fx:id="_leftNum" text="Mine" textFill="WHITE" />
-            <Button mnemonicParsing="false" onMouseClicked="#handlePressRestart" style="-fx-background-color: lightgrey;" text="Restart" textFill="#5b5b5b" />
-            <Label fx:id="timerLabel" text="Time" textFill="WHITE" />
+            <Label fx:id="_leftNum1" alignment="CENTER" text="Mine" textFill="WHITE">
+               <HBox.margin>
+                  <Insets left="15.0" />
+               </HBox.margin>
+            </Label>
+            <Label fx:id="_leftNum" alignment="CENTER" minWidth="60.0" text="100" textFill="WHITE" />
+            <Button fx:id="_restart" minWidth="60.0" mnemonicParsing="false" onMouseClicked="#handlePressRestart" style="-fx-background-color: lightgrey;" text="Restart" textFill="#5b5b5b" />
+            <Label fx:id="timerLabel1" alignment="CENTER_RIGHT" text="Time" textFill="WHITE" />
+            <Label fx:id="timerLabel" alignment="CENTER" minWidth="60.0" text="999" textFill="WHITE" />
          </children>
+         <VBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0" />
+         </VBox.margin>
       </HBox>
       <GridPane fx:id="_pane" alignment="CENTER">
-      </GridPane>
+         <VBox.margin>
+            <Insets left="15.0" right="15.0" top="5" />
+         </VBox.margin></GridPane>
    </children>
+   <padding>
+      <Insets bottom="15.0" />
+   </padding>
 </VBox>

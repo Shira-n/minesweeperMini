@@ -1,0 +1,31 @@
+.tool-bar {
+    -fx-base: grey;
+    -fx-font-size: 9pt;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-border-color: transparent;
+}
+
+.menu .label {
+    -fx-text-fill: white;
+}
+
+.menu-item .label {
+    -fx-text-fill: black;
+}
+
+.menu-item .label:focused {
+    -fx-text-fill: white;
+}
+
+.menu-item:focused{
+    -fx-background-color: grey;
+}
+
+.menu-item {
+    -fx-background-color: lightgrey;
+}
+
+.menu:hover, .menu:showing{
+    -fx-background-color: lightgrey;
+
+}

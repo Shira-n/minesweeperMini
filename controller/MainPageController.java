@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseButton;
@@ -46,10 +47,10 @@ public class MainPageController {
     private SplitPane _splitPane;
 
     @FXML
-    private Label _gameOver;
+    private Label _leftNum;
 
     @FXML
-    private Label _leftNum;
+    private Button _restart;
 
     private boolean _firstClick;
     private MineField _field;
@@ -65,8 +66,7 @@ public class MainPageController {
 
     @FXML
     public void initialize() {
-
-        _gameOver.setVisible(false);
+        _restart.setText("('w')");
         timerLabel.setText(timeSeconds.toString());
 
         //get user customised parameters
@@ -276,8 +276,7 @@ public class MainPageController {
      */
     private void gameOver(Rectangle selected) {
         selected.setFill(Color.BLUE);
-        System.out.println("Game Over");
-        _gameOver.setVisible(true);
+        _restart.setText("(/w\\)");
         _pane.setDisable(true);
         _timeline.stop();
 
@@ -285,9 +284,8 @@ public class MainPageController {
 
     private void checkWon() {
         if (_field.hasWon()){
+            _restart.setText("(*w*)");
             System.out.println("won");
-            _gameOver.setText("won");
-            _gameOver.setVisible(true);
             _pane.setDisable(true);
             _timeline.stop();
         }
@@ -351,6 +349,7 @@ public class MainPageController {
 
     @FXML
     public void handlePressRestart() {
+        _timeline = null;
         newGame();
     }
 
@@ -365,6 +364,7 @@ public class MainPageController {
             Stage primaryStage = new Stage();
             primaryStage.setTitle("Minesweeper mini");
             primaryStage.setScene(new Scene(root));
+            primaryStage.setResizable(false);
             primaryStage.show();
         } catch (Exception ex) {
         }

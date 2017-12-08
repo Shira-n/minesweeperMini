@@ -15,6 +15,7 @@ public class MSminiMain extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("view/MainPage.fxml"));
         primaryStage.setTitle("Minesweeper mini");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 
