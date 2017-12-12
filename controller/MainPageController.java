@@ -44,9 +44,6 @@ public class MainPageController {
     private Label timerLabel;
 
     @FXML
-    private SplitPane _splitPane;
-
-    @FXML
     private Label _leftNum;
 
     @FXML
@@ -54,7 +51,7 @@ public class MainPageController {
 
     private MineField _field;
     private boolean _firstClick;
-    private RecordManager _record;
+    private static RecordManager _record;
 
     private static Timeline _timeline;
     private int timeSeconds;
@@ -318,7 +315,7 @@ public class MainPageController {
             _restart.setText("(*w*)");
             _pane.setDisable(true);
             _timeline.stop();
-            //updateRecord();
+            updateRecord();
         }
     }
 
@@ -389,21 +386,25 @@ public class MainPageController {
             Record
      */
 
+    public static RecordManager getRecorder(){
+        return _record;
+    }
+
 
     private void updateRecord(){
         switch (Hardness.getHardness()){
             case EASY:
-                if (timeSeconds < _record.getEazRec()){
+                if (_record.getEazRec() < 0 || timeSeconds < _record.getEazRec()){
                     _record.writeRecord(0,enterName(), timeSeconds);
                 }
                 break;
             case INTERMEDIATE:
-                if (timeSeconds < _record.getMedRec()){
+                if (_record.getMedRec() < 0 || timeSeconds < _record.getMedRec()){
                     _record.writeRecord(1,enterName(), timeSeconds);
                 }
                 break;
             case EXPERT:
-                if (timeSeconds < _record.getExpRec()){
+                if (_record.getExpRec() < 0 || timeSeconds < _record.getExpRec()){
                     _record.writeRecord(2,enterName(), timeSeconds);
                 }
                 break;
@@ -423,34 +424,18 @@ public class MainPageController {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.showAndWait();
         }
-        catch (Exception e) {
-
-        }
+        catch (Exception e) {}
 
         String name = PopUpController.getName();
         if (name.length() < 1){
-            name = "unknow";
+            name = "unknown";
         }
-
         return name;
     }
 
+    //best score board
+    //User name can't include#   最好做成只能是数字，字母和下划线上划线
+    //没记录的时候特别显示
+    //reset score;
 
-
-
-    private void updateRecordl(){
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/PopUp.fxml"));
-            AnchorPane pane = loader.load();
-            Scene scene = new Scene(pane);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initOwner(_pane.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-
-            stage.showAndWait();
-        }
-        catch (Exception e) { }
-    }
 }

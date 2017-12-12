@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import sample.RecordManager;
 
 
 public class PopUpController {
@@ -14,6 +15,7 @@ public class PopUpController {
     private TextField _nameField;
 
     private static String _name;
+
 
     @FXML
     public void handlePressOk(MouseEvent event) {
