@@ -5,11 +5,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PopUpController">
+<AnchorPane prefHeight="129.0" prefWidth="266.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PopUpController">
 
-      <Label layoutX="228.0" layoutY="31.0" text="Label" />
-      <TextField fx:id="_nameField" layoutX="308.0" layoutY="122.0" />
-      <Button layoutX="154.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#handlePressAnon" text="Anonymous" />
-      <Button layoutX="362.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" text="OK" />
+      <Label layoutX="30.0" layoutY="40.0" text="Name" />
+      <TextField fx:id="_nameField" layoutX="74.0" layoutY="35.0" prefHeight="27.0" prefWidth="158.0" />
+      <Button layoutX="53.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#handlePressAnon" text="Anonymous" />
+      <Button layoutX="189.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" text="OK" />
 
 </AnchorPane>
