@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class RecordManager {
-    private static String PATH = ".record.txt";
+    private static String PATH = "record.txt";
     private static char SPLITER= '#';
     private static String DEFAULT_LINE = "no record";
     private static File _record;
@@ -61,11 +61,11 @@ public class RecordManager {
         }else{
             String[] records = record.split("#");
             eaz_keeper = records[0];
-            med_keeper = records[0];
-            exp_keeper = records[0];
-            eaz_rec = Integer.parseInt(records[0]);
-            med_rec = Integer.parseInt(records[0]);
-            exp_rec = Integer.parseInt(records[0]);
+            med_keeper = records[2];
+            exp_keeper = records[4];
+            eaz_rec = Integer.parseInt(records[1]);
+            med_rec = Integer.parseInt(records[3]);
+            exp_rec = Integer.parseInt(records[5]);
         }
     }
 
@@ -89,6 +89,14 @@ public class RecordManager {
         } catch (FileNotFoundException e) { }
     }
 
+
+    public void resetRecord(){
+        try {
+            PrintWriter writer = new PrintWriter(PATH);
+            writer.println(DEFAULT_LINE);
+            writer.close();
+        } catch (FileNotFoundException e) { }
+    }
     /*
         Getters
      */

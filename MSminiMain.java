@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 public class MSminiMain extends Application {
 
-    private static final Hardness DEFAULT = Hardness.EASY;
+    //private static final Hardness DEFAULT = Hardness.getHardness();
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -21,7 +21,8 @@ public class MSminiMain extends Application {
 
 
     public static void main(String[] args) {
-        Hardness.setHardness(DEFAULT);
+        //Hardness.setHardness(DEFAULT);
+        //if ()
         launch(args);
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import sample.RecordManager;
 
 
 public class PopUpController {
@@ -15,13 +16,16 @@ public class PopUpController {
 
     private static String _name;
 
+
     @FXML
     public void handlePressOk(MouseEvent event) {
         _name = _nameField.getText();
+        closeWindow(event);
     }
 
     @FXML
     public void handlePressAnon(MouseEvent event) {
+        _name = "";
         closeWindow(event);
     }
 
@@ -29,5 +33,9 @@ public class PopUpController {
     private void closeWindow(MouseEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    public static String getName() {
+        return _name;
     }
 }
