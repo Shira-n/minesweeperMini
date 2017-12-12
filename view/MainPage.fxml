@@ -25,7 +25,7 @@
                         <MenuItem fx:id="_expert" mnemonicParsing="false" onAction="#handlePressExpert" text="Expert" />
                         <MenuItem fx:id="_custom" mnemonicParsing="false" onAction="#handlePressCustom" text="Custom" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                         <MenuItem mnemonicParsing="false" text="Leaderboard" />
+                         <MenuItem fx:id="_leaderboard" mnemonicParsing="false" text="Leaderboard" onAction="#handlePressLeaderboard"/>
                      </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">

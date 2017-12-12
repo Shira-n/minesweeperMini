@@ -87,10 +87,12 @@ public class RecordManager {
             writer.println(update);
             writer.close();
         } catch (FileNotFoundException e) { }
+        readRecord();
     }
 
 
     public void resetRecord(){
+        setDefaultValue();
         try {
             PrintWriter writer = new PrintWriter(PATH);
             writer.println(DEFAULT_LINE);
