@@ -72,6 +72,7 @@ public class MainPageController {
         timerLabel.setText(timeSeconds + "");
 
         //get user customised parameters
+        Hardness.renewHardness();
         _row = Hardness.getRow();
         _col = Hardness.getCol();
         _mineNum = Hardness.getMine();
@@ -290,6 +291,7 @@ public class MainPageController {
             _restart.setText("(*w*)");
             _pane.setDisable(true);
             _timeline.stop();
+            //updateRecord();
         }
     }
 
@@ -358,21 +360,6 @@ public class MainPageController {
      */
     private void newGame() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/PopUp.fxml"));
-            AnchorPane pane = loader.load();
-            Scene scene = new Scene(pane);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initOwner(_pane.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-
-            stage.showAndWait();
-        }
-        catch (Exception e) {
-
-        }
-
-        try {
             _pane.getScene().getWindow().hide();
             Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainPage.fxml"));
             Stage primaryStage = new Stage();
@@ -389,9 +376,12 @@ public class MainPageController {
     private void updateRecord(){
         switch (Hardness.getHardness()){
             case EASY:
-                if (timeSeconds < MSminiMain.EAZ_RECORD){
-                    MSminiMain.EAZ_KEEPER = enterName();
-                }
+                System.out.println(MSminiMain.EAZ_KEEPER);
+                //if (timeSeconds < MSminiMain.EAZ_RECORD){
+                    String name = enterName();
+                    MSminiMain.EAZ_KEEPER = name;
+                //}
+                System.out.println(MSminiMain.EAZ_KEEPER);
                 break;
             case INTERMEDIATE:
                 if (timeSeconds < MSminiMain.MED_RECORD){
@@ -409,10 +399,25 @@ public class MainPageController {
     }
 
     private String enterName(){
-        String name = "";
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/PopUp.fxml"));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initOwner(_pane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+        }
+        catch (Exception e) {
+
+        }
+
+        String name = PopUpController.getName();
         if (name.length() < 1){
             name = "unknow";
         }
+
         return name;
     }
 

@@ -42,4 +42,10 @@ public enum Hardness {
     }
 
     public static Hardness getHardness() {return _hardness; }
+
+    public static void renewHardness(){
+        if (_hardness == null){
+            _hardness = Hardness.EASY;
+        }
+    }
 }
