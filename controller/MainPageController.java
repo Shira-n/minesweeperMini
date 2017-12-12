@@ -29,14 +29,13 @@ import javafx.util.Duration;
 import sample.Hardness;
 import sample.MSminiMain;
 import sample.MineField;
+import sample.RecordManager;
 
 import java.util.ArrayList;
 
 public class MainPageController {
 
     private static final Integer FINISHTIME = 500;
-
-    private int timeSeconds;
 
     @FXML
     private GridPane _pane;
@@ -53,10 +52,12 @@ public class MainPageController {
     @FXML
     private Button _restart;
 
-    private boolean _firstClick;
     private MineField _field;
+    private boolean _firstClick;
+    private RecordManager _record;
 
     private static Timeline _timeline;
+    private int timeSeconds;
 
     private int _row;
     private int _col;
@@ -65,13 +66,19 @@ public class MainPageController {
     private ArrayList<int[]> _premarked = new ArrayList<>();
     private int _left;
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+            Initialization
+     */
+
     @FXML
     public void initialize() {
         _restart.setText("('w')");
         timeSeconds = 0;
         timerLabel.setText(timeSeconds + "");
+        _record = new RecordManager();
 
-        //get user customised parameters
         _row = Hardness.getRow();
         _col = Hardness.getCol();
         _mineNum = Hardness.getMine();
@@ -81,15 +88,13 @@ public class MainPageController {
         //Set up blank field, waiting for the first click
         _firstClick = true;
 
-        //create the field with selected size
+        //create GUI
         initialiseField();
-        //add squares into field
         setUpSquares();
     }
 
-
     /**
-     * create the field with size according to hardness level
+     * Create the field with size according to hardness level
      */
     private void initialiseField() {
         //Set up cols and rows of grid pane
@@ -120,22 +125,7 @@ public class MainPageController {
                 rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        if(_timeline == null) {
-                            timerLabel.setText(timeSeconds + "");
-                            _timeline = new Timeline();
-                            _timeline.setCycleCount(Timeline.INDEFINITE);
-                            _timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-                                @Override
-                                public void handle(ActionEvent event) {
-                                    timeSeconds++;
-                                    timerLabel.setText(timeSeconds + "");
-                                    if (timeSeconds > FINISHTIME) {
-                                        _timeline.stop();
-                                    }
-                                }
-                            }));
-                            _timeline.play();
-                        }
+                        setUpTimeline();
                         //if the square senses a right click action
                         if (event.getButton() == MouseButton.SECONDARY) {
                             rightClick((Rectangle)event.getSource(), getIndex(event.getSource()));
@@ -150,13 +140,37 @@ public class MainPageController {
         }
     }
 
+    private void setUpTimeline() {
+        if(_timeline == null) {
+            timerLabel.setText(timeSeconds + "");
+            _timeline = new Timeline();
+            _timeline.setCycleCount(Timeline.INDEFINITE);
+            _timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    timeSeconds++;
+                    timerLabel.setText(timeSeconds + "");
+                    if (timeSeconds > FINISHTIME) {
+                        _timeline.stop();
+                    }
+                }
+            }));
+            _timeline.play();
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+            Left and Right Click
+     */
 
     /**
      * Method handles when user performs a right click on a certain square. If the square is already
      * flagged (red color) then change it back to un-flagged (grey), and vice versa.
      */
     public void rightClick(Rectangle selected, int[] index) {
-        //if the square has been flagged before, un-flag it
+        //Mark the block
         if (!_firstClick) {
             _field.mark(index[0], index[1]);
         }else{
@@ -166,14 +180,13 @@ public class MainPageController {
                 _premarked.add(index);
             }
         }
-
-        if (selected.getFill().equals(Color.RED)) {
+        //Change GUI
+        if (selected.getFill().equals(Color.RED)) {         //If the square has been flagged before, un-flag it
             selected.setFill(Color.LIGHTGREY);
             _left++;
             _leftNum.setText(""+_left);
         }
-        //if the sqaure has not been flagged, then flag
-        else {
+        else {      //If the sqaure has not been flagged, then flag
             selected.setFill(Color.RED);
             _left--;
             _leftNum.setText(""+_left);
@@ -185,7 +198,7 @@ public class MainPageController {
      * then game over. Otherwise, it clears the square and check the surrounding squares.
      */
     public void leftClicked(Rectangle selected, int[] index) {
-        if (_firstClick){               //Generate a new field that the first click block must be 0
+        if (_firstClick){       //Generate a new field that the first click block must be 0
             _firstClick = false;
             _field = new MineField(_row, _col, _mineNum, index[0], index[1]);
             for (int[] i : _premarked){
@@ -194,12 +207,10 @@ public class MainPageController {
             ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
             revealNodes(pos);
         }else {
-            if (!selected.getFill().equals(Color.RED)) {
-                // if the user clicks on a mine, then game over
+            if (!selected.getFill().equals(Color.RED)) {    // if the user clicks on a mine, then game over
                 if (_field.isMine(index[0], index[1])) {
                     gameOver(selected);
-                } else {
-                    //find all the exposed squares generated from the click
+                } else {    //find all the exposed squares generated from the click
                     ArrayList<int[]> pos = _field.ripple(index[0], index[1]);
                     revealNodes(pos);
                 }
@@ -208,8 +219,39 @@ public class MainPageController {
         checkWon();
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+            Supporting Methods
+     */
+
     /**
-     * reveal a list of nodes at once
+     * Find position of a practicular node
+     */
+    private int[] getIndex(Object node){
+        int row = _pane.getRowIndex((Node)node);
+        int col = _pane.getColumnIndex((Node)node);
+        int[] index = {row,col};
+        return index;
+    }
+
+    /**
+     * Get the square at a particular position
+     */
+    private Node getNode (int row, int column) {
+        Node result = null;
+        ObservableList<Node> childrens = _pane.getChildren();
+        for (Node node : childrens) {
+            if(_pane.getRowIndex(node) == row && _pane.getColumnIndex(node) == column) {
+                result = node;
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Reveal a list of nodes at once
      */
     private void revealNodes(ArrayList<int[]> list) {
         //for each of the exposed square, clear the square
@@ -222,7 +264,7 @@ public class MainPageController {
     }
 
     /**
-     * reveal the value of a particular square
+     * Reveal the value of a particular square
      */
     private void clearSquare(Rectangle selected, int row, int col){
         //change the sqaure background to grey colour
@@ -255,27 +297,7 @@ public class MainPageController {
     }
 
     /**
-     * get the square at a particular position
-     * @param row
-     * @param column
-     * @return
-     */
-    private Node getNode (int row, int column) {
-        Node result = null;
-        ObservableList<Node> childrens = _pane.getChildren();
-        for (Node node : childrens) {
-            if(_pane.getRowIndex(node) == row && _pane.getColumnIndex(node) == column) {
-                result = node;
-                break;
-            }
-        }
-        return result;
-    }
-
-
-    /**
-     * shows game over gui
-     * @param selected
+     * Shows game over GUI
      */
     private void gameOver(Rectangle selected) {
         selected.setFill(Color.BLUE);
@@ -285,6 +307,9 @@ public class MainPageController {
 
     }
 
+    /**
+     * Show won GUI
+     */
     private void checkWon() {
         if (_field.hasWon()){
             _restart.setText("(*w*)");
@@ -293,19 +318,25 @@ public class MainPageController {
         }
     }
 
-
-    /**
-     * find position of a practicular node
-     * @param node
-     * @return
-     */
-    private int[] getIndex(Object node){
-        int row = _pane.getRowIndex((Node)node);
-        int col = _pane.getColumnIndex((Node)node);
-        int[] index = {row,col};
-        return index;
+    private void newGame() {
+        try {
+            _pane.getScene().getWindow().hide();
+            Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainPage.fxml"));
+            Stage primaryStage = new Stage();
+            primaryStage.setTitle("Minesweeper mini");
+            primaryStage.setScene(new Scene(root));
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        } catch (Exception ex) {
+        }
     }
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /*
+            Menu Bar & Buttons
+     */
 
     @FXML
     public void handlePressEasy(ActionEvent event) {
@@ -335,15 +366,10 @@ public class MainPageController {
             stage.setScene(scene);
             stage.initOwner(_pane.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
-
             stage.showAndWait();
         }
-        catch (Exception e) {
-
-        }
+        catch (Exception e) { }
         newGame();
-
-
     }
 
     @FXML
@@ -353,54 +379,29 @@ public class MainPageController {
     }
 
 
+
+
+
     /*
-    create a new game with selected hardness setting
+            Record
      */
-    private void newGame() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/PopUp.fxml"));
-            AnchorPane pane = loader.load();
-            Scene scene = new Scene(pane);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initOwner(_pane.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-
-            stage.showAndWait();
-        }
-        catch (Exception e) {
-
-        }
-
-        try {
-            _pane.getScene().getWindow().hide();
-            Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainPage.fxml"));
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Minesweeper mini");
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setResizable(false);
-            primaryStage.show();
-        } catch (Exception ex) {
-        }
-    }
-
 
 
     private void updateRecord(){
         switch (Hardness.getHardness()){
             case EASY:
-                if (timeSeconds < MSminiMain.EAZ_RECORD){
-                    MSminiMain.EAZ_KEEPER = enterName();
+                if (timeSeconds < _record.getEazRec()){
+                    _record.writeRecord(0,enterName(), timeSeconds);
                 }
                 break;
             case INTERMEDIATE:
-                if (timeSeconds < MSminiMain.MED_RECORD){
-                    MSminiMain.MED_KEEPER = enterName();
+                if (timeSeconds < _record.getMedRec()){
+                    _record.writeRecord(1,enterName(), timeSeconds);
                 }
                 break;
             case EXPERT:
-                if (timeSeconds < MSminiMain.EXP_RECORD){
-                    MSminiMain.EXP_KEEPER = enterName();
+                if (timeSeconds < _record.getExpRec()){
+                    _record.writeRecord(2,enterName(), timeSeconds);
                 }
                 break;
             default:
@@ -417,4 +418,21 @@ public class MainPageController {
     }
 
 
+
+
+    private void updateRecordl(){
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/PopUp.fxml"));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initOwner(_pane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+
+            stage.showAndWait();
+        }
+        catch (Exception e) { }
+    }
 }

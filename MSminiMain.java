@@ -10,16 +10,9 @@ public class MSminiMain extends Application {
 
     private static final Hardness DEFAULT = Hardness.EASY;
 
-    public static int EAZ_RECORD;
-    public static String EAZ_KEEPER;
-    public static int MED_RECORD;
-    public static String MED_KEEPER;
-    public static int EXP_RECORD;
-    public static String EXP_KEEPER;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("view/PopUp.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view/MainPage.fxml"));
         primaryStage.setTitle("Minesweeper mini");
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
@@ -31,7 +24,4 @@ public class MSminiMain extends Application {
         Hardness.setHardness(DEFAULT);
         launch(args);
     }
-
-
-
 }
