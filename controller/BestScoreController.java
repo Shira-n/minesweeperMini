@@ -54,7 +54,7 @@ public class BestScoreController {
         }
         else {
             name.setText(keeper);
-            time.setText(""+record);
+            time.setText(""+record + " seconds");
         }
     }
 
