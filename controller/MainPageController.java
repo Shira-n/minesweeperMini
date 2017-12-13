@@ -374,12 +374,27 @@ public class MainPageController {
     }
 
     @FXML
+    public void handlePressLeaderboard(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/BestScore.fxml"));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initOwner(_pane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     public void handlePressRestart() {
         _timeline = null;
         newGame();
     }
-
-
 
 
     /*

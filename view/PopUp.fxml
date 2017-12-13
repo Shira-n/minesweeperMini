@@ -5,11 +5,12 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PopUpController">
+<AnchorPane prefHeight="129.0" prefWidth="266.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PopUpController">
 
-      <Label layoutX="228.0" layoutY="31.0" text="Label" />
-      <TextField fx:id="_nameField" layoutX="308.0" layoutY="122.0" />
-      <Button layoutX="154.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#handlePressAnon" text="Anonymous" />
-      <Button layoutX="362.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" text="OK" />
+      <Label layoutX="32.0" layoutY="47.0" text="Name" />
+      <TextField fx:id="_nameField" layoutX="76.0" layoutY="42.0" prefHeight="27.0" prefWidth="158.0" />
+      <Button layoutX="55.0" layoutY="88.0" mnemonicParsing="false" onMouseClicked="#handlePressAnon" text="Anonymous" />
+      <Button layoutX="191.0" layoutY="88.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" text="OK" />
+   <Label fx:id="_alert" alignment="CENTER" layoutX="32.0" layoutY="14.0" prefHeight="17.0" prefWidth="210.0" />
 
 </AnchorPane>
