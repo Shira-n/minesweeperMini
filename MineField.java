@@ -192,30 +192,14 @@ public class MineField {
      */
     private boolean isDecided(int row, int col) {
         int i = 0;
-        if (isMarked(row - 1, col - 1)) {
-            i++;
-        }
-        if (isMarked(row - 1, col)) {
-            i++;
-        }
-        if (isMarked(row - 1, col + 1)) {
-            i++;
-        }
-        if (isMarked(row, col + 1)) {
-            i++;
-        }
-        if (isMarked(row, col - 1)) {
-            i++;
-        }
-        if (isMarked(row + 1, col - 1)) {
-            i++;
-        }
-        if (isMarked(row + 1, col)) {
-            i++;
-        }
-        if (isMarked(row + 1, col + 1)) {
-            i++;
-        }
+        if (isMarked(row - 1, col - 1)) { i++; }
+        if (isMarked(row - 1, col)) { i++; }
+        if (isMarked(row - 1, col + 1)) { i++; }
+        if (isMarked(row, col + 1)) { i++; }
+        if (isMarked(row, col - 1)) { i++; }
+        if (isMarked(row + 1, col - 1)) { i++; }
+        if (isMarked(row + 1, col)) { i++; }
+        if (isMarked(row + 1, col + 1)) { i++; }
         return i == getNum(row, col);
     }
 
