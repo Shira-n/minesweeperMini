@@ -1,16 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="129.0" prefWidth="266.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PopUpController">
-
-      <Label layoutX="32.0" layoutY="47.0" text="Name" />
-      <TextField fx:id="_nameField" layoutX="76.0" layoutY="42.0" prefHeight="27.0" prefWidth="158.0" />
-      <Button layoutX="55.0" layoutY="88.0" mnemonicParsing="false" onMouseClicked="#handlePressAnon" text="Anonymous" />
-      <Button layoutX="191.0" layoutY="88.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" text="OK" />
-   <Label fx:id="_alert" alignment="CENTER" layoutX="32.0" layoutY="14.0" prefHeight="17.0" prefWidth="210.0" />
+<AnchorPane prefHeight="150.0" prefWidth="300.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.PopUpController">
+   <children>
+   
+         <Label layoutX="31.0" layoutY="65.0" text="Name">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+         <TextField fx:id="_nameField" layoutX="96.0" layoutY="60.0" prefHeight="29.0" prefWidth="153.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+         <Button layoutX="20.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#handlePressAnon" prefHeight="29.0" prefWidth="110.0" style="-fx-background-color: lightgrey;" text="Anonymous" textFill="#5b5b5b">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+         <Button layoutX="173.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" prefHeight="29.0" prefWidth="110.0" style="-fx-background-color: lightgrey;" text="OK" textFill="#5b5b5b">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Label fx:id="_alert" alignment="CENTER" contentDisplay="CENTER" layoutX="-1.0" layoutY="38.0" prefHeight="21.0" prefWidth="302.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="8.0" prefHeight="32.0" prefWidth="302.0" text="Congratulations" underline="true">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
 
 </AnchorPane>

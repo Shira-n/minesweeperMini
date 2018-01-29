@@ -219,6 +219,32 @@ public class MineField {
         return flag;
     }
 
+    public ArrayList<int[]> getWrongMarks(){
+        ArrayList<int[]> wrongMarks = new ArrayList<>();
+        for (int row = 0; row < _row; row++) {
+            for (int col = 0; col < _col; col++) {
+                if (isIn(row, col) && isMarked(row, col) && !isMine(row, col)){
+                    int[] wrongMark = {row, col};
+                    wrongMarks.add(wrongMark);
+                }
+            }
+        }
+        return wrongMarks;
+    }
+
+    public ArrayList<int[]> getUnmarkedMines(){
+        ArrayList<int[]> unmarked = new ArrayList<>();
+        for (int row = 0; row < _row; row++) {
+            for (int col = 0; col < _col; col++) {
+                if (isIn(row, col) && !isMarked(row, col) && isMine(row, col)){
+                    int[] wrongMark = {row, col};
+                    unmarked.add(wrongMark);
+                }
+            }
+        }
+        return unmarked;
+    }
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
         Setters

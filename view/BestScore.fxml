@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="169.0" prefWidth="366.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.BestScoreController">
+<AnchorPane prefHeight="169.0" prefWidth="366.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controller.BestScoreController">
    <children>
-      <GridPane layoutX="40.0" layoutY="25.0" prefHeight="90.0" prefWidth="326.0">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="32.0" prefWidth="368.0" text="Leaderboard" underline="true">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="48.0" layoutY="36.0" prefHeight="90.0" prefWidth="326.0">
         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="88.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.0" minWidth="10.0" prefWidth="113.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="131.8763427734375" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="218.0" minWidth="10.0" prefWidth="74.1236572265625" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="120.0" />
         </columnConstraints>
         <rowConstraints>
@@ -21,18 +23,51 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label fx:id="_easyName" minWidth="120.0" prefWidth="120.0" text="Anonymous" GridPane.columnIndex="2" />
-            <Label fx:id="_easyTime" maxWidth="100.0" minWidth="100.0" text="9999 seconds" GridPane.columnIndex="1" />
-            <Label text="Intermediate" GridPane.rowIndex="1" />
-            <Label fx:id="_expertTime" maxWidth="100.0" minWidth="100.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label fx:id="_medTime" maxWidth="100.0" minWidth="100.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Expert" GridPane.rowIndex="2" />
-            <Label text="Beginner" />
-            <Label fx:id="_expertName" prefWidth="120.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label fx:id="_medName" prefWidth="120.0" text="Intermediate" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label fx:id="_easyName" minWidth="120.0" prefWidth="120.0" text="Anonymous" GridPane.columnIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="_easyTime" maxWidth="100.0" minWidth="100.0" text="9999 seconds" GridPane.columnIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label text="Intermediate" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="_expertTime" maxWidth="100.0" minWidth="100.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="_medTime" maxWidth="100.0" minWidth="100.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label text="Expert" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label text="Beginner">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="_expertName" prefWidth="120.0" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
+            <Label fx:id="_medName" prefWidth="120.0" text="Intermediate" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
          </children>
       </GridPane>
-      <Button layoutX="70.0" layoutY="132.0" mnemonicParsing="false" onMouseClicked="#handlePressReset" text="Reset Score" />
-      <Button layoutX="231.0" layoutY="132.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" text="OK" />
+      <Button layoutX="39.0" layoutY="128.0" mnemonicParsing="false" onMouseClicked="#handlePressReset" prefHeight="29.0" prefWidth="100.0" text="Reset Score"  style="-fx-background-color: lightgrey;" textFill="#5b5b5b" >
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <Button layoutX="232.0" layoutY="128.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" prefHeight="29.0" prefWidth="100.0" text="OK"  style="-fx-background-color: lightgrey;" textFill="#5b5b5b" >
+         <font>
+            <Font size="14.0" />
+         </font></Button>
    </children>
 </AnchorPane>

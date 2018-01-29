@@ -1,14 +1,11 @@
 package sample.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import sample.RecordManager;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,16 +25,20 @@ public class PopUpController {
     @FXML
     public void handlePressOk(MouseEvent event) {
         _name = _nameField.getText();
-        if (checkName()&&!(_name.equals(""))){
-            closeWindow(event);
+        if(_name.length() > 14){
+            _nameField.clear();
+            _alert.setText("No more than 14 letters");
         }
         else if (_name.equals("")){
             _nameField.clear();
-            _alert.setText("please enter a username");
+            _alert.setText("Please enter a username");
+        }
+        else if (checkName()){
+            closeWindow(event);
         }
         else {
             _nameField.clear();
-            _alert.setText("only letters,numbers and underscores.");
+            _alert.setText("Only letters,numbers and underscores.");
         }
 
     }

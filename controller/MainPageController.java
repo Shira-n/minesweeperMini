@@ -2,6 +2,7 @@ package sample.controller;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,20 +12,18 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import sample.Hardness;
 import sample.MSminiMain;
@@ -35,7 +34,7 @@ import java.util.ArrayList;
 
 public class MainPageController {
 
-    private static final Integer FINISHTIME = 500;
+    private static final Integer FINISHTIME = 999;
 
     @FXML
     private GridPane _pane;
@@ -49,6 +48,12 @@ public class MainPageController {
     @FXML
     private Button _restart;
 
+    @FXML
+    private ToolBar _bar;
+
+    @FXML
+    private VBox _root;
+
     private MineField _field;
     private boolean _firstClick;
     private static RecordManager _record;
@@ -59,6 +64,11 @@ public class MainPageController {
     private int _row;
     private int _col;
     private int _mineNum;
+
+    private double xOffset = 0;
+    private double yOffset = 0;
+
+
 
     private ArrayList<int[]> _premarked = new ArrayList<>();
     private int _left;
@@ -91,8 +101,28 @@ public class MainPageController {
         //create GUI
         initialiseField();
         setUpSquares();
+        setDraggable();
     }
 
+
+
+    private void setDraggable(){
+        _bar.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset= event.getSceneY();
+            }
+        });
+        _bar.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            }
+        });
+    }
     /**
      * Create the field with size according to hardness level
      */
@@ -125,13 +155,13 @@ public class MainPageController {
                 rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        setUpTimeline();
                         //if the square senses a right click action
                         if (event.getButton() == MouseButton.SECONDARY) {
                             rightClick((Rectangle)event.getSource(), getIndex(event.getSource()));
                         }
                         //when the square senses a left click action
                         else {
+                            setUpTimeline();
                             leftClicked((Rectangle)event.getSource(), getIndex(event.getSource()));
                         }
                     }
@@ -300,11 +330,19 @@ public class MainPageController {
      * Shows game over GUI
      */
     private void gameOver(Rectangle selected) {
-        selected.setFill(Color.BLUE);
         _restart.setText("(/w\\)");
         _pane.setDisable(true);
         _timeline.stop();
-
+        for (int[] wrongMark : _field.getWrongMarks()){
+            Rectangle node = (Rectangle)getNode(wrongMark[0],wrongMark[1]);
+            Image img = new Image("x.png");
+            node.setFill(new ImagePattern(img));
+        }
+        for (int[] unmarked : _field.getUnmarkedMines()){
+            Rectangle node = (Rectangle)getNode(unmarked[0],unmarked[1]);
+            node.setFill(Color.DARKRED);
+        }
+        selected.setFill(Color.BLACK);
     }
 
     /**
@@ -327,6 +365,7 @@ public class MainPageController {
             primaryStage.setTitle("Minesweeper mini");
             primaryStage.setScene(new Scene(root));
             primaryStage.setResizable(false);
+            primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.show();
         } catch (Exception ex) {
         }
@@ -367,6 +406,7 @@ public class MainPageController {
             stage.setScene(scene);
             stage.initOwner(_pane.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
         }
         catch (Exception e) { }
@@ -383,6 +423,7 @@ public class MainPageController {
             stage.setScene(scene);
             stage.initOwner(_pane.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
         }
         catch (Exception e) {
@@ -396,6 +437,29 @@ public class MainPageController {
         newGame();
     }
 
+    @FXML
+    public void handlePressAbout(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/About.fxml"));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initOwner(_pane.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.showAndWait();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handlePressQuit(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
+    }
 
     /*
             Record
@@ -437,6 +501,7 @@ public class MainPageController {
             stage.setScene(scene);
             stage.initOwner(_pane.getScene().getWindow());
             stage.initModality(Modality.WINDOW_MODAL);
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
         }
         catch (Exception e) {}
@@ -447,10 +512,5 @@ public class MainPageController {
         }
         return name;
     }
-
-    //best score board
-    //User name can't include#   最好做成只能是数字，字母和下划线上划线
-    //没记录的时候特别显示
-    //reset score;
 
 }

@@ -1,6 +1,5 @@
 package sample.controller;
 
-import com.sun.prism.impl.Disposer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -54,7 +53,7 @@ public class BestScoreController {
         }
         else {
             name.setText(keeper);
-            time.setText(""+record + " seconds");
+            time.setText(""+record + " secs");
         }
     }
 
