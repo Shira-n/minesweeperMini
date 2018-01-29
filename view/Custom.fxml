@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -36,15 +35,15 @@
                <font>
                   <Font size="14.0" />
                </font></Label>
-            <TextField fx:id="row" GridPane.columnIndex="1">
+            <TextField fx:id="row" prefHeight="9.0" minWidth="40.0" GridPane.columnIndex="1">
                <font>
                   <Font size="14.0" />
                </font></TextField>
-            <TextField fx:id="col" prefHeight="9.0" prefWidth="39.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="col" prefHeight="9.0" minWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <font>
                   <Font size="14.0" />
                </font></TextField>
-            <TextField fx:id="mine" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <TextField fx:id="mine" prefHeight="9.0" minWidth="40.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <font>
                   <Font size="14.0" />
                </font></TextField>
