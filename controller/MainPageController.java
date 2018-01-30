@@ -82,6 +82,7 @@ public class MainPageController {
     @FXML
     public void initialize() {
         _restart.setText("('w')");
+        _timeline = null;
         timeSeconds = 0;
         timerLabel.setText(timeSeconds + "");
         _record = new RecordManager();
