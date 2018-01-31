@@ -1,5 +1,4 @@
 # minesweeperMini
-写着玩儿
 
 下载MineSweeper★mini★.jar即可玩
 
