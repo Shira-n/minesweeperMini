@@ -31,12 +31,9 @@ public class PopUpController {
 
     @FXML
     public void initialize() {
-        _nameField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode()== KeyCode.ENTER){
-                    readInput();
-                }
+        _nameField.setOnKeyPressed(event -> {
+            if(event.getCode()== KeyCode.ENTER){
+                readInput();
             }
         });
     }
