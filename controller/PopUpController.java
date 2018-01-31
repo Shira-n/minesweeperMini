@@ -1,9 +1,13 @@
 package sample.controller;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -19,11 +23,35 @@ public class PopUpController {
     @FXML
     private TextField _nameField;
 
+    @FXML
+    private Button _ok;
+
     private static String _name;
 
 
     @FXML
+    public void initialize() {
+        _nameField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode()== KeyCode.ENTER){
+                    readInput();
+                }
+            }
+        });
+    }
+    @FXML
     public void handlePressOk(MouseEvent event) {
+        readInput();
+    }
+
+    @FXML
+    public void handlePressAnon(MouseEvent event) {
+        _name = "";
+        closeWindow();
+    }
+
+    private void readInput() {
         _name = _nameField.getText();
         if(_name.length() > 14){
             _nameField.clear();
@@ -34,24 +62,16 @@ public class PopUpController {
             _alert.setText("Please enter a username");
         }
         else if (checkName()){
-            closeWindow(event);
+            closeWindow();
         }
         else {
             _nameField.clear();
             _alert.setText("Only letters,numbers and underscores.");
         }
-
     }
 
-    @FXML
-    public void handlePressAnon(MouseEvent event) {
-        _name = "";
-        closeWindow(event);
-    }
-
-
-    private void closeWindow(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+    private void closeWindow() {
+        Stage stage = (Stage) ((Node) _nameField).getScene().getWindow();
         stage.close();
     }
 

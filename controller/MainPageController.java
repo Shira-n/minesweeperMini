@@ -14,8 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -53,6 +52,21 @@ public class MainPageController {
 
     @FXML
     private VBox _root;
+
+    @FXML
+    private MenuItem _easy;
+
+    @FXML
+    private MenuItem _intermediate;
+
+    @FXML
+    private MenuItem _expert;
+
+    @FXML
+    private MenuItem _custom;
+
+    @FXML
+    private MenuItem _leaderBoard;
 
     private MineField _field;
     private boolean _firstClick;
@@ -103,6 +117,7 @@ public class MainPageController {
         initialiseField();
         setUpSquares();
         setDraggable();
+        setUpMenu();
     }
 
 
@@ -189,6 +204,7 @@ public class MainPageController {
             _timeline.play();
         }
     }
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -379,57 +395,55 @@ public class MainPageController {
             Menu Bar & Buttons
      */
 
-    @FXML
-    public void handlePressEasy(ActionEvent event) {
-        Hardness.setHardness(Hardness.EASY);
-        newGame();
-    }
+    private void setUpMenu() {
+        _easy.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Hardness.setHardness(Hardness.EASY);
+                newGame();
+            }
+        });
+        _easy.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
 
-    @FXML
-    public void handlePressIntermediate(){
-        Hardness.setHardness(Hardness.INTERMEDIATE);
-        newGame();
-    }
+        _intermediate.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Hardness.setHardness(Hardness.INTERMEDIATE);
+                newGame();
+            }
+        });
+        _intermediate.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
 
-    @FXML
-    public void handlePressExpert() {
-        Hardness.setHardness(Hardness.EXPERT);
-        newGame();
-    }
+        _expert.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Hardness.setHardness(Hardness.EXPERT);
+                newGame();
+            }
+        });
+        _expert.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
 
-    @FXML
-    public void handlePressCustom(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/Custom.fxml"));
-            AnchorPane pane = loader.load();
-            Scene scene = new Scene(pane);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initOwner(_pane.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-        }
-        catch (Exception e) { }
-        newGame();
-    }
+        _custom.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                windowLoader("/sample/view/Custom.fxml");
+                System.out.println("After close");
+                try {
+                    newGame();
+                    System.out.println("After game");
+                }
+                catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
 
-    @FXML
-    public void handlePressLeaderboard(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/BestScore.fxml"));
-            AnchorPane pane = loader.load();
-            Scene scene = new Scene(pane);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initOwner(_pane.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        _leaderBoard.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                windowLoader("/sample/view/BestScore.fxml");
+            }
+        });
     }
 
     @FXML
@@ -440,8 +454,19 @@ public class MainPageController {
 
     @FXML
     public void handlePressAbout(ActionEvent event) {
+        windowLoader("/sample/view/About.fxml");
+    }
+
+    @FXML
+    public void handlePressQuit(ActionEvent event) {
+        Platform.exit();
+        System.exit(0);
+    }
+
+
+    private void windowLoader(String source) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/About.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(source));
             AnchorPane pane = loader.load();
             Scene scene = new Scene(pane);
             Stage stage = new Stage();
@@ -454,12 +479,6 @@ public class MainPageController {
         catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    public void handlePressQuit(ActionEvent event) {
-        Platform.exit();
-        System.exit(0);
     }
 
     /*
@@ -494,18 +513,7 @@ public class MainPageController {
     }
 
     private String enterName(){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/sample/view/PopUp.fxml"));
-            AnchorPane pane = loader.load();
-            Scene scene = new Scene(pane);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.initOwner(_pane.getScene().getWindow());
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.showAndWait();
-        }
-        catch (Exception e) {}
+        windowLoader("/sample/view/PopUp.fxml");
 
         String name = PopUpController.getName();
         if (name.length() < 1){

@@ -1,9 +1,14 @@
 package sample.controller;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import sample.Hardness;
@@ -54,8 +59,14 @@ public class CustomController {
     }
 
     private void closeWindow(MouseEvent event) {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.close();
+        Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+        System.out.println("Close");
+        try {
+            stage.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Closed");
     }
 
     private void checkInput(MouseEvent event) {
@@ -69,6 +80,7 @@ public class CustomController {
             alert("Too big");
         }
         else {
+            System.out.println("Create");
             Hardness.setCustom(_row,_col,_mine);
             Hardness.setHardness(Hardness.CUSTOM);
 

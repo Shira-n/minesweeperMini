@@ -27,7 +27,7 @@
             <Font size="14.0" />
          </font>
       </Button>
-         <Button layoutX="173.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" prefHeight="29.0" prefWidth="110.0" style="-fx-background-color: lightgrey;" text="OK" textFill="#5b5b5b">
+         <Button fx:id="_ok" layoutX="173.0" layoutY="104.0" mnemonicParsing="false" onMouseClicked="#handlePressOk" prefHeight="29.0" prefWidth="110.0" style="-fx-background-color: lightgrey;" text="OK" textFill="#5b5b5b">
          <font>
             <Font size="14.0" />
          </font>

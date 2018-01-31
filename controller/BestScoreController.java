@@ -33,6 +33,8 @@ public class BestScoreController {
     public void initialize() {
         mgr = MainPageController.getRecorder();
         setUpPage();
+
+
     }
     @FXML
     public void handlePressOk(MouseEvent event) {

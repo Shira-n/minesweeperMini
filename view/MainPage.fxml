@@ -14,12 +14,12 @@
               <menus>
                 <Menu mnemonicParsing="false" style="-fx-text-fill: white;" text="Game">
                      <items>
-                      <MenuItem fx:id="_easy" mnemonicParsing="false" onAction="#handlePressEasy" text="Easy" />
-                        <MenuItem fx:id="_intermediate" mnemonicParsing="false" onAction="#handlePressIntermediate" text="Intermediate" />
-                        <MenuItem fx:id="_expert" mnemonicParsing="false" onAction="#handlePressExpert" text="Expert" />
-                        <MenuItem fx:id="_custom" mnemonicParsing="false" onAction="#handlePressCustom" text="Custom" />
+                      <MenuItem fx:id="_easy" mnemonicParsing="false" text="Easy" />
+                        <MenuItem fx:id="_intermediate" mnemonicParsing="false" text="Intermediate" />
+                        <MenuItem fx:id="_expert" mnemonicParsing="false" text="Expert" />
+                        <MenuItem fx:id="_custom" mnemonicParsing="false" text="Custom" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                         <MenuItem fx:id="_leaderboard" mnemonicParsing="false" onAction="#handlePressLeaderboard" text="Leaderboard" />
+                         <MenuItem fx:id="_leaderBoard" mnemonicParsing="false" text="Leaderboard" />
                      </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Help">
