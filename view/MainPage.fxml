@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -30,15 +29,12 @@
               </menus>
             </MenuBar>
             <Pane HBox.hgrow="ALWAYS" />
-            <Button fx:id="_quit" style="-fx-text-fill: white;" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handlePressQuit" prefHeight="4.0" prefWidth="23.0" text="×">
+            <Button fx:id="_quit" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#handlePressQuit" prefHeight="4.0" prefWidth="23.0" style="-fx-text-fill: white;" text="×">
                <font>
                   <Font size="12.0" />
                </font>
             </Button>
         </items>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
          <padding>
             <Insets top="1.0" />
          </padding>
@@ -51,7 +47,7 @@
                </HBox.margin>
             </Label>
             <Label fx:id="_leftNum" alignment="CENTER" minWidth="17.0" text="99" textFill="WHITE" />
-            <Button fx:id="_restart" mnemonicParsing="false" onMouseClicked="#handlePressRestart" prefHeight="21.0" prefWidth="36.0" style="-fx-background-color: lightgrey;" textFill="#5b5b5b" text="(*w*)" >
+            <Button fx:id="_restart" mnemonicParsing="false" onMouseClicked="#handlePressRestart" prefHeight="21.0" prefWidth="36.0" style="-fx-background-color: lightgrey;" text="(*w*)" textFill="#5b5b5b">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -68,7 +64,7 @@
       </HBox>
       <GridPane fx:id="_pane" alignment="CENTER">
          <VBox.margin>
-            <Insets left="5.0" right="5.0" />
+            <Insets left="5.0" right="4.0" />
          </VBox.margin></GridPane>
    </children>
    <padding>

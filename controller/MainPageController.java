@@ -25,9 +25,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import sample.Hardness;
-import sample.MSminiMain;
 import sample.MineField;
 import sample.RecordManager;
+import sample.MSminiMain;
 
 import java.util.ArrayList;
 
@@ -49,9 +49,6 @@ public class MainPageController {
 
     @FXML
     private ToolBar _bar;
-
-    @FXML
-    private VBox _root;
 
     @FXML
     private MenuItem _easy;
@@ -88,21 +85,20 @@ public class MainPageController {
     private int _left;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
             Initialization
      */
 
     @FXML
     public void initialize() {
-
         _restart.setText("('w')");
+
         _timeline = null;
         timeSeconds = 0;
         timerLabel.setText(timeSeconds + "");
+
         _record = new RecordManager();
 
-        //get user customised parameters
         Hardness.renewHardness();
 
         _row = Hardness.getRow();
@@ -111,35 +107,16 @@ public class MainPageController {
         _left = _mineNum;
         _leftNum.setText(""+_left);
 
-        //Set up blank field, waiting for the first click
         _firstClick = true;
 
-        //create GUI
+        _restart.setText("('w')");
         initialiseField();
+
         setUpSquares();
         setDraggable();
         setUpMenu();
     }
 
-
-
-    private void setDraggable(){
-        _bar.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset= event.getSceneY();
-            }
-        });
-        _bar.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-                stage.setX(event.getScreenX() - xOffset);
-                stage.setY(event.getScreenY() - yOffset);
-            }
-        });
-    }
     /**
      * Create the field with size according to hardness level
      */
@@ -187,28 +164,22 @@ public class MainPageController {
         }
     }
 
-    private void setUpTimeline() {
-        if(_timeline == null) {
-            timerLabel.setText(timeSeconds + "");
-            _timeline = new Timeline();
-            _timeline.setCycleCount(Timeline.INDEFINITE);
-            _timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    timeSeconds++;
-                    timerLabel.setText(timeSeconds + "");
-                    if (timeSeconds > FINISHTIME) {
-                        _timeline.stop();
-                    }
-                }
-            }));
-            _timeline.play();
-        }
+    /**
+     * Enable the user to drag the window.
+     */
+    private void setDraggable(){
+        _bar.setOnMousePressed(event -> {
+            xOffset = event.getSceneX();
+            yOffset= event.getSceneY();
+        });
+        _bar.setOnMouseDragged(event -> {
+            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage.setX(event.getScreenX() - xOffset);
+            stage.setY(event.getScreenY() - yOffset);
+        });
     }
 
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
             Left and Right Click
      */
@@ -268,13 +239,12 @@ public class MainPageController {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
             Supporting Methods
      */
 
     /**
-     * Find position of a practicular node
+     * Find position of a particular node
      */
     private int[] getIndex(Object node){
         int row = _pane.getRowIndex((Node)node);
@@ -334,12 +304,9 @@ public class MainPageController {
             //change text colour to white
             label.setTextFill(Color.WHITE);
             _pane.add(label, col, row);
-            label.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    revealNodes(_field.sweep(row,col));
-                    checkWon();
-                }
+            label.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                revealNodes(_field.sweep(row,col));
+                checkWon();
             });
         }
     }
@@ -353,7 +320,7 @@ public class MainPageController {
         _timeline.stop();
         for (int[] wrongMark : _field.getWrongMarks()){
             Rectangle node = (Rectangle)getNode(wrongMark[0],wrongMark[1]);
-            Image img = new Image("x.png");
+            Image img = new Image("sample/x.png");
             node.setFill(new ImagePattern(img));
         }
         for (int[] unmarked : _field.getUnmarkedMines()){
@@ -391,62 +358,62 @@ public class MainPageController {
         }
     }
 
+    /**
+     * Renew Timeline
+     */
+    private void setUpTimeline() {
+        if(_timeline == null) {
+            timerLabel.setText(timeSeconds + "");
+            _timeline = new Timeline();
+            _timeline.setCycleCount(Timeline.INDEFINITE);
+            _timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
+                timeSeconds++;
+                timerLabel.setText(timeSeconds + "");
+                if (timeSeconds > FINISHTIME) {
+                    _timeline.stop();
+                }
+            }));
+            _timeline.play();
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
     /*
             Menu Bar & Buttons
      */
 
     private void setUpMenu() {
-        _easy.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Hardness.setHardness(Hardness.EASY);
-                newGame();
-            }
+        _easy.setOnAction(event -> {
+            Hardness.setHardness(Hardness.EASY);
+            newGame();
         });
         _easy.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN));
 
-        _intermediate.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Hardness.setHardness(Hardness.INTERMEDIATE);
-                newGame();
-            }
+        _intermediate.setOnAction(event -> {
+            Hardness.setHardness(Hardness.INTERMEDIATE);
+            newGame();
         });
         _intermediate.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
 
-        _expert.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Hardness.setHardness(Hardness.EXPERT);
-                newGame();
-            }
+        _expert.setOnAction(event -> {
+            Hardness.setHardness(Hardness.EXPERT);
+            newGame();
         });
         _expert.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.CONTROL_DOWN));
 
-        _custom.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                windowLoader("/sample/view/Custom.fxml");
-                System.out.println("After close");
-                try {
-                    newGame();
-                    System.out.println("After game");
-                }
-                catch(Exception e){
-                    e.printStackTrace();
-                }
+        _custom.setOnAction(event -> {
+            windowLoader("/sample/view/Custom.fxml");
+            System.out.println("After close");
+            try {
+                newGame();
+                System.out.println("After game");
+            }
+            catch(Exception e){
+                e.printStackTrace();
             }
         });
 
-        _leaderBoard.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                windowLoader("/sample/view/BestScore.fxml");
-            }
-        });
+        _leaderBoard.setOnAction(event -> windowLoader("/sample/view/BestScore.fxml"));
     }
 
     @FXML
@@ -466,7 +433,6 @@ public class MainPageController {
         System.exit(0);
     }
 
-
     private void windowLoader(String source) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(source));
@@ -484,6 +450,7 @@ public class MainPageController {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
             Record
      */
@@ -491,7 +458,6 @@ public class MainPageController {
     public static RecordManager getRecorder(){
         return _record;
     }
-
 
     private void updateRecord(){
         switch (Hardness.getHardness()){

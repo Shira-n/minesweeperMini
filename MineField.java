@@ -153,11 +153,11 @@ public class MineField {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
-        Double click (Mid click) on a clicked block (a number)
+        Left click on a clicked block (a number)
      */
 
     /**
-     * Automatically reveal unclicked blocks around the input block if the number of marked blocks is the same as the
+     * Automatically reveal unclicked blocks around the clicked block if the number of marked blocks is the same as the
      * block indicates.
      */
     public ArrayList<int[]> sweep(int row, int col){
