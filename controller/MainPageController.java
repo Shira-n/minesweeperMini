@@ -82,7 +82,7 @@ public class MainPageController {
     private double xOffset = 0;
     private double yOffset = 0;
 
-
+    private Stage _stage;
 
     private ArrayList<int[]> _premarked = new ArrayList<>();
     private int _left;
@@ -95,6 +95,7 @@ public class MainPageController {
 
     @FXML
     public void initialize() {
+
         _restart.setText("('w')");
         _timeline = null;
         timeSeconds = 0;
@@ -376,15 +377,17 @@ public class MainPageController {
 
     private void newGame() {
         try {
+            _stage = MSminiMain.getStage();
+            _stage.hide();
             _pane.getScene().getWindow().hide();
             Parent root = FXMLLoader.load(getClass().getResource("/sample/view/MainPage.fxml"));
-            Stage primaryStage = new Stage();
-            primaryStage.setTitle("Minesweeper mini");
-            primaryStage.setScene(new Scene(root));
-            primaryStage.setResizable(false);
-            primaryStage.initStyle(StageStyle.UNDECORATED);
-            primaryStage.show();
+
+            _stage.setTitle("Minesweeper mini");
+            _stage.setScene(new Scene(root));
+            _stage.setResizable(false);
+            _stage.show();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

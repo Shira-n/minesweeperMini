@@ -12,6 +12,8 @@ import javafx.stage.StageStyle;
 
 public class MSminiMain extends Application {
 
+    private static Stage _primaryStage;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("view/MainPage.fxml"));
@@ -20,10 +22,16 @@ public class MSminiMain extends Application {
         primaryStage.setResizable(false);
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
+        _primaryStage = primaryStage;
     }
 
 
     public static void main(String[] args) {
         launch(args);
     }
+
+    public static Stage getStage() {
+        return _primaryStage;
+    }
+
 }
