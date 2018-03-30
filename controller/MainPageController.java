@@ -145,12 +145,13 @@ public class MainPageController {
             for (int j = 0; j< _row; j++) {
                 Rectangle rect = new Rectangle(24,24, Color.LIGHTGREY);
                 _pane.add(rect,i,j);
+
                 //add event handler for each square
                 rect.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
                         //if the square senses a right click action
-                        if (event.getButton() == MouseButton.SECONDARY) {
+                        if ((event.getButton() == MouseButton.SECONDARY) && !(((Rectangle)event.getSource()).getFill().equals(Color.GREY))) {
                             rightClick((Rectangle)event.getSource(), getIndex(event.getSource()));
                         }
                         //when the square senses a left click action
