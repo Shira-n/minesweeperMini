@@ -191,7 +191,7 @@ public class MainPageController {
      */
     public void rightClick(Rectangle selected, int[] index) {
         //Mark the block
-        if (!_firstClick) {
+        if (!_firstClick) { 
             _field.mark(index[0], index[1]);
         }else{
             if (_premarked.contains(index)){
