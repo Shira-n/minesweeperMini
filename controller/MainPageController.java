@@ -79,10 +79,12 @@ public class MainPageController {
     private double xOffset = 0;
     private double yOffset = 0;
 
-    private Stage _stage;
+    private static Stage _stage;
 
     private ArrayList<int[]> _premarked = new ArrayList<>();
     private int _left;
+
+    private static int _square_size = 30;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
@@ -124,12 +126,12 @@ public class MainPageController {
         //Set up cols and rows of grid pane
         for (int i = 0; i < _row; i++) {
             RowConstraints row = new RowConstraints();
-            row.setPrefHeight(24);
+            row.setPrefHeight(_square_size);
             _pane.getRowConstraints().add(row);
         }
         for (int i = 0; i < _col; i++) {
             ColumnConstraints col = new ColumnConstraints();
-            col.setPrefWidth(24);
+            col.setPrefWidth(_square_size);
             _pane.getColumnConstraints().add(col);
         }
         _pane.setHgap(1.0);
@@ -143,7 +145,7 @@ public class MainPageController {
         //Add buttons
         for (int i = 0; i <_col; i++) {
             for (int j = 0; j< _row; j++) {
-                Rectangle rect = new Rectangle(24,24, Color.LIGHTGREY);
+                Rectangle rect = new Rectangle(_square_size,_square_size, Color.LIGHTGREY);
                 _pane.add(rect,i,j);
 
                 //add event handler for each square
@@ -191,7 +193,7 @@ public class MainPageController {
      */
     public void rightClick(Rectangle selected, int[] index) {
         //Mark the block
-        if (!_firstClick) { 
+        if (!_firstClick) {
             _field.mark(index[0], index[1]);
         }else{
             if (_premarked.contains(index)){
@@ -299,7 +301,7 @@ public class MainPageController {
             //set square text to the value
             Label label = new Label("" + value);
             //format the sqaure
-            label.setPrefSize(24, 24);
+            label.setPrefSize(_square_size, _square_size);
             label.setFont(new Font("System", 15));
             label.setAlignment(Pos.CENTER);
             //change text colour to white
@@ -429,6 +431,9 @@ public class MainPageController {
     }
 
     @FXML
+    public void handlePressSetting(ActionEvent event) { popUpWindow("/sample/view/Setting.fxml"); }
+
+    @FXML
     public void handlePressQuit(ActionEvent event) {
         Platform.exit();
         System.exit(0);
@@ -445,6 +450,21 @@ public class MainPageController {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initStyle(StageStyle.UNDECORATED);
             stage.showAndWait();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void popUpWindow(String source) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(source));
+            AnchorPane pane = loader.load();
+            Scene scene = new Scene(pane);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initStyle(StageStyle.UNDECORATED);
+            stage.show();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -492,4 +512,13 @@ public class MainPageController {
         return name;
     }
 
+    ///////////////////////////////////////
+
+    /*
+    Change Square Size
+     */
+    public static Stage changeSquareSize(int len) {
+        _square_size = len;
+        return MSminiMain.getStage();
+    }
 }
