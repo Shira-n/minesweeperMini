@@ -34,6 +34,7 @@ import java.util.ArrayList;
 public class MainPageController {
 
     private static final Integer FINISHTIME = 999;
+    private static final int DEFAULT_SQUARE_SIZE = 30;
 
     @FXML
     private GridPane _pane;
@@ -84,7 +85,7 @@ public class MainPageController {
     private ArrayList<int[]> _premarked = new ArrayList<>();
     private int _left;
 
-    private static int _square_size = 30;
+    private static int _square_size = DEFAULT_SQUARE_SIZE;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
@@ -520,5 +521,9 @@ public class MainPageController {
     public static Stage changeSquareSize(int len) {
         _square_size = len;
         return MSminiMain.getStage();
+    }
+
+    public static int getSquareSize(){
+        return _square_size;
     }
 }

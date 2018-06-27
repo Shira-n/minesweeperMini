@@ -13,11 +13,10 @@ import javafx.stage.Stage;
 public class SettingController {
 
 
-    private final static int DEFAULT_VALUE = 30;
-
     @FXML
     private Slider _slider;
 
+    //current square size value
     private int _value;
 
     /*
@@ -27,7 +26,9 @@ public class SettingController {
     public void initialize() {
         _slider.setMin(10);
         _slider.setMax(50);
-        _slider.setValue(DEFAULT_VALUE);
+
+        _value = MainPageController.getSquareSize();
+        _slider.setValue(_value);
         _slider.setBlockIncrement(1);
 
         _slider.valueProperty().addListener((
@@ -43,6 +44,7 @@ public class SettingController {
      */
     @FXML
     public void handlePressOk(MouseEvent event) {
+        _slider.setValue(_value);
 
         Stage mainStage = MainPageController.changeSquareSize(_value);
         //load game with new square size
